@@ -1,6 +1,6 @@
-swagger: '2.0'
-
+openapi: '3.0.0'
 info:
+  version: '2.7.7'
   title: API Carto Appellations viticoles
   description: >
     Le module appellations viticoles permet de récupérer les zones intersectant une géométrie GeoJSON.
@@ -40,114 +40,142 @@ info:
       * Linéaire :
 
         `{"type":"LineString","coordinates":[[4.681549,47.793784],[4.741974,47.788248]]}`
-   
-
-
-consumes:
-  - application/json
-produces:
-  - application/json
-
-basePath: /api
 
 paths:
-  /aoc/appellation-viticole:
+  /api/aoc/appellation-viticole:
     post:
+      operationId: postAppellationViticole
       description: |
         Prend une geometrie de type GeoJSON en paramètre d'entrée et renvoie les appellations viticoles intersectantes
-      consumes:
-        - application/x-www-form-urlencoded
-      Paramètres de sorties : Retourne un résultat de Type "FeatureCollection"
       parameters:
-
         - name: geom
           in: query
           required: true
           schema:
-            $ref: "#/definitions/Geometry"
+            $ref: "#/components/schemas/Geometry"
 
       tags:
         - Appellations viticoles
       responses:
         '200':
           description: "Succès"
-          schema:
-            $ref: "#/definitions/FeatureCollectionAppellationViticole"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/FeatureCollectionAppellationViticole'
         '400':
           description: "Paramètres invalide"
-          schema:
-            $ref: "#/definitions/Error"
+          content:
+            application/json:
+                schema:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/Error'
         '500':
           description: "Erreur dans le traitement de la requête"
-          schema:
-            $ref: "#/definitions/Error"
-
-definitions:
-
-
-  FeatureAppellationViticole:
-    description: "Objet géographique appellation viticole" 
-    type: object
-    allOf:
-      - $ref: "#/definitions/Feature"
-    properties:
+          content:
+            application/json:
+                schema:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/Error'
+            
+components:
+  schemas:
+    Geometry:
+      type: object
+      description: Une `Geometry` au sens GeoJSON
       properties:
-        type: object
+        type:
+          type: string
+          description: Le type géométrique
+          enum:
+            - Point
+            - LineString
+            - Polygon
+            - MultiPoint
+            - MultiLineString
+            - MultiPolygon
+        coordinates:
+          type: array
+          items: {}
+    Feature:
+      type: object
+      description: Une `Feature` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`Feature`)
+        id:
+          type: string
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+    MultiPolygon:
+      type: object
+      description: Un `MultiPolygon` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type géométrique (`MultiPolygon`)
+        coordinates:
+          type: array
+          items: {}
+    
+    FeatureAppellationViticole:
+      description: Objet géographique appellation viticole
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Feature"
+      properties:
         properties:
-          appelation:
-            type: string        
-          idapp:
-            type: string
-          id_uni:
-            type: string
-            description: corresponds à "segment-idapp-insee"
-          insee:
-            type: string
-          segment:
-            type: string
-          instruction_obligatoire:
-            type: boolean
-          granularite:
-            type: string
-            enum:
-              - commune
-              - exacte
-          appellation:
-            type: string
-          contains:
-            type: boolean
-      geometry:
-        $ref: '#/definitions/MultiPolygon'
-
-  FeatureCollectionAppellationViticole:
-    description: "Liste d'objet géographique appellation viticole"
-    type: object
-    properties:
-      type: 
-        type: string
-        enum:
-        - FeatureCollection
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureAppellationViticole'
-      
-  Error:
-    required:
-      - code
-      - message
-    properties:
-      code:
-        type: string
-      message:
-        type: string
-
-  # import definitions
-  FeatureCollection:
-    $ref: './schema/geojson.yml#definitions/FeatureCollection'
-  Feature:
-    $ref: './schema/geojson.yml#definitions/Feature'
-  Geometry:
-    $ref: './schema/geojson.yml#definitions/Geometry'
-  MultiPolygon:
-    $ref: './schema/geojson.yml#definitions/MultiPolygon'    
+          type: object
+          properties:
+            appelation:
+              type: string        
+            idapp:
+              type: string
+            id_uni:
+              type: string
+              description: corresponds à "segment-idapp-insee"
+            insee:
+              type: string
+            segment:
+              type: string
+            instruction_obligatoire:
+              type: boolean
+            granularite:
+              type: string
+              enum:
+                - commune
+                - exacte
+            appellation:
+              type: string
+            contains:
+              type: boolean
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'
+    
+    FeatureCollectionAppellationViticole:
+      description: "Liste d'objet géographique appellation viticole"
+      type: object
+      properties:
+        type: 
+          type: string
+          enum:
+          - FeatureCollection
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureAppellationViticole'
+        
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string

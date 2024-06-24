@@ -1,5 +1,6 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
+  version: '2.7.7'
   title: Module Cadastre
   description: >
 
@@ -67,207 +68,227 @@ info:
   contact:
     name: API Carto Cadastre
 
-produces:
-  - application/json
-
-basePath: /api
-
 paths:
-  /cadastre/commune:
+  /api/cadastre/commune:
     get:
-      summary: Récupération de la géométrie d'une commune
-      description: |
-        Retourne un résultat de Type "FeatureCollection".
+      operationId: getCommune
+      description: Récupération de la géométrie d'une commune.
       parameters:
-
         - name: code_insee
           in: query
           description: Code insee de la commune sur 5 caractères
-          type: string
-          pattern: '\d{5}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{5}'
 
         - name: code_dep
           in: query
           description: Code du département
-          type: string
-          pattern: '\d{2,3}'
           required: false
-
+          schema:
+            type: string
+            pattern: '\d{2,3}'
+        
         - name: geom
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/definitions/Geometry'
+            $ref: '#/components/schemas/Geometry'
             
         - name: _limit
           in: query
           description: Limite de résultats à afficher(chiffre entre 1 et 500)
-          type: integer
           required: false
+          schema:
+            type: integer
           
         - name: _start
           in: query
           description: Position pour le début de la recherche
-          type: integer
           required: false
+          schema: 
+            type: integer
 
         - name: source_ign
           in: query
           description: « PCI » pour la ressource Parcellaire Express ou « BDP » pour la ressource BD Parcellaire
-          type: string
           required: false
-
+          schema:
+            type: string
       tags:
         - Commune
       responses:
         '200':
           description: Success
-          schema:
-            $ref: '#/definitions/FeatureCollectionCommune'
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/FeatureCollectionCommune'
 
-  /cadastre/division:
+  /api/cadastre/division:
     get:
+      operationId: getDivision
       summary: Recherche d'informations sur les divisions parcellaires d'une commune
       description: |
         Retourne un résultat de Type "FeatureCollection" avec la liste des divisions parcellaires d'une commune
         * Paramètre insee => Retour des divisions parcellaires d'une commune
         * Paramètre Insee + section => Retour des divisions parcellaires d'une section dans une commune
       parameters:
-
         - name: code_insee
           in: query
           description: Code insee de la commune sur 5 caractères
-          type: string
-          pattern: '\d{5}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{5}'
 
         - name: code_dep
           in: query
           description: Code du département
-          type: string
-          pattern: '\d{2,3}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{2,3}'
 
         - name: code_com
           in: query
           description: Code de la commune
-          type: string
-          pattern: '\d{2,3}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{2,3}'
 
         - name: section
           in: query
           description: Section de la parcelle sur 2 caractères
-          pattern: '\w{2}'
-          type: string
           required: false
+          schema:
+            pattern: '\w{2}'
+            type: string
 
         - name: code_arr
           in: query
           description: Code arrondisssement pour Paris, Lyon, Marseille
-          pattern: '\d{3}'
-          type: string
           required: false
+          schema:
+            pattern: '\d{3}'
+            type: string
           
         - name: geom
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/definitions/Geometry'
+            $ref: '#/components/schemas/Geometry'
           
         - name: _limit
           in: query
           description: Limite de résultats à afficher(chiffre entre 1 et 1000)
-          type: integer
           required: false
+          schema:
+            type: integer
           
         - name: _start
           in: query
           description: Position pour le début de la recherche
-          type: integer
           required: false
+          schema:
+            type: integer
     
       tags:
         - Division BD Parcellaire
       responses:
         '200':
           description: Success
-          schema:
-            $ref: '#/definitions/FeatureCollectionDivision'
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/FeatureCollectionDivision'
 
-  /cadastre/feuille:
+  /api/cadastre/feuille:
     get:
+      operationId: getFeuille
       summary: Recherche d'informations sur les feuilles parcellaires d'une commune en utilisant la couche PCI EXPRESS
       description: |
         Retourne un résultat de Type "FeatureCollection" avec la liste des feuilles d'une commune
         * Paramètre insee => Retour des feuilles d'une commune
         * Paramètre Insee + section => Retour des feuilles d'une section dans une commune
       parameters:
-
         - name: code_insee
           in: query
           description: Code insee de la commune sur 5 caractères
-          type: string
-          pattern: '\d{5}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{5}'
 
         - name: code_dep
           in: query
           description: Code du département
-          type: string
-          pattern: '\d{2,3}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{2,3}'
 
         - name: code_com
           in: query
           description: Code de la commune
-          type: string
-          pattern: '\d{2,3}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{2,3}'
 
         - name: section
           in: query
           description: Section de la parcelle sur 2 caractères
-          pattern: '\w{2}'
-          type: string
           required: false
+          schema:
+            pattern: '\w{2}'
+            type: string
 
         - name: code_arr
           in: query
           description: Code arrondisssement pour Paris, Lyon, Marseille
-          pattern: '\d{3}'
-          type: string
           required: false
+          schema:
+            pattern: '\d{3}'
+            type: string
           
         - name: geom
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/definitions/Geometry'
+            $ref: '#/components/schemas/Geometry'
           
         - name: _limit
           in: query
           description: Limite de résultats à afficher (chiffre entre 1 et 1000)
-          type: integer
           required: false
+          schema:
+            type: integer
           
         - name: _start
           in: query
           description: Position pour le début de la recherche
-          type: integer
           required: false
+          schema:
+            type: integer
     
       tags:
         - Feuille PCI EXPRESS
       responses:
         '200':
           description: Success
-          schema:
-            $ref: '#/definitions/FeatureCollectionDivision'
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/FeatureCollectionFeuillePCI'
 
-  /cadastre/parcelle:
+  /api/cadastre/parcelle:
     get:
+      operationId: getParcelle
       summary: Recherche d'informations sur les parcelles cadastrales d'une commune
       description: |
         Retourne un résultat de Type "FeatureCollection" avec différentes informations sur les parcelles cadastrales.
@@ -276,61 +297,69 @@ paths:
         - name: code_insee
           in: query
           description: Code insee de la commune sur 5 caractères
-          type: string
-          pattern: '\d{5}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{5}'
 
         - name: section
           in: query
-          description: Section de la parcelle sur 2 caractères
-          type: string
-          pattern: '\w{2}'
+          description: Section de la parcelle sur 2 caractères'
           required: false
+          schema:
+            type: string
+            pattern: '\w{2}'
 
         - name: numero
           in: query
           description: Numero de la parcelle sur 4 caractères
-          type: string
-          pattern: '\d{4}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{4}'
 
         - name: code_arr
           in: query
           description: Code arrondissement pour Paris, Lyon, Marseille
-          type: string
-          pattern: '\d{3}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{3}'
 
         - name: com_abs
           in: query
           description: Code commune absorbée
-          type: string
-          pattern: '\d{3}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{3}'
           
         - name: geom
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/definitions/Geometry'
+            $ref: '#/components/schemas/Geometry'
 
         - name: _limit
           in: query
           description: Limite de résultats à afficher (chiffre entre 1 et 1000)
-          type: integer
           required: false
+          schema:
+            type: integer
           
         - name: _start
           in: query
           description: Position pour le début de la recherche
-          type: integer
           required: false
+          schema:
+            type: integer
         
         - name: source_ign
           in: query
           description: « PCI » pour la ressource Parcellaire Express ou « BDP » pour la ressource BD Parcellaire
-          type: string
           required: false
+          schema:
+            type: string
           
       tags:
         - Parcelle
@@ -338,12 +367,15 @@ paths:
       responses:
         '200':
           description: Success
-          schema:
-            $ref: '#/definitions/FeatureCollectionParcelle'
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/FeatureCollectionParcelle'
 
 
-  /cadastre/localisant:
+  /api/cadastre/localisant:
     get:
+      operationId: getLocalisant
       summary: Informations sur les parcelles non vectorisées.
       description: Renvoie une featureCollection de type Point pour centrer le point sur une carte
       tags:
@@ -353,271 +385,330 @@ paths:
         - name: code_insee
           in: query
           description: Code insee de la commune sur 5 caractères
-          type: string
-          pattern: '\d{5}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{5}'
 
         - name: section
           in: query
           description: Section de la parcelle
-          type: string
-          pattern: '\w{2}'
           required: false
+          schema:
+            type: string
+            pattern: '\w{2}'
 
         - name: numero
           in: query
           description: Numéro de la parcelle sur 4 caractères
-          type: string
-          pattern: '\d{4}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{4}'
 
         - name: code_arr
           in: query
           description: Code arrondissement pour Paris, Lyon, Marseille
-          type: string
-          pattern: '\d{3}'
           required: false
+          schema:
+            type: string
+            pattern: '\d{3}'
 
         - name: geom
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/definitions/Geometry'
+            $ref: '#/components/schemas/Geometry'
           
         - name: _limit
           in: query
           description: Limite de résultats à afficher (chiffre entre 1 et 1000)
-          type: integer
           required: false
+          schema:
+            type: integer
           
         - name: _start
           in: query
           description: Position pour le début de la recherche
-          type: integer
           required: false
+          schema:
+            type: integer
         
         - name: source_ign
           in: query
           description: « PCI » pour la ressource Parcellaire Express ou « BDP » pour la ressource BD Parcellaire
-          type: string
           required: false
+          schema:
+            type: string
         
       responses:
         '200':
           description: Success
-          schema:
-            $ref: '#/definitions/FeatureCollectionLocalisant'
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/FeatureCollectionLocalisant'
 
 
-definitions:
-
-  #---------------------------------------------------
-  # /cadastre/commune
-  #---------------------------------------------------
+components:
+  schemas:
+    Coordinate:
+      type: array
+      items:
+        type: number
+      minItems: 2
+      maxItems: 4
+    Geometry:
+      type: object
+      description: Une `Geometry` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type géométrique
+          enum:
+            - Point
+            - LineString
+            - Polygon
+            - MultiPoint
+            - MultiLineString
+            - MultiPolygon
+        coordinates:
+          type: array
+          items: {}
+    Feature:
+      type: object
+      description: Une `Feature` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`Feature`)
+        id:
+          type: string
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+    FeatureCollection:
+      type: object
+      description: Une `FeatureCollection` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`FeatureCollection`)
+        features:
+          type: array
+          items: {}
+    Point:
+      type: object
+      description: Un `Point` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type géométrique (`Point`)
+          enum:
+            - Point
+        coordinates:
+          $ref: '#/components/schemas/Coordinate'
+    MultiPolygon:
+      type: object
+      description: Un `MultiPolygon` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type géométrique (`MultiPolygon`)
+        coordinates:
+          type: array
+          items: {}
+          
+    #---------------------------------------------------
+    # /cadastre/commune
+    #---------------------------------------------------
   
-  FeatureCommune:
-    description: 'Une commune'
-    allOf:
-    - $ref: '#/definitions/Feature'
-    properties:
+    FeatureCommune:
+      description: Une commune
+      allOf:
+      - $ref: '#/components/schemas/Feature'
       properties:
-        type: object
         properties:
-          nom_commune:
-            type: string
-          code_dep:
-            type: string
-          code_insee:
-            type: string
-      geometry:
-        $ref: '#/definitions/MultiPolygon'
-
-  FeatureCollectionCommune:
-    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCommune`
-    allOf:
-    - $ref: '#/definitions/FeatureCollection'
-    properties:
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureCommune'
-      geometry:
-        $ref: '#/definitions/MultiPolygon'
-
-  #---------------------------------------------------
-  # /cadastre/division
-  #---------------------------------------------------
-            
-  FeatureDivision:
-    description: 'Une division'
-    allOf:
-    - $ref: '#/definitions/Feature'
-    properties:
+          type: object
+          properties:
+            nom_commune:
+              type: string
+            code_dep:
+              type: string
+            code_insee:
+              type: string
+        geometry:
+         $ref: '#/components/schemas/MultiPolygon'
+    FeatureCollectionCommune:
+      description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCommune`
+      allOf:
+      - $ref: '#/components/schemas/FeatureCollection'
       properties:
-        type: object
-        properties:
-          feuille:
-            type: number
-          section:
-            type: string
-          code_dep:
-            type: string
-          code_com:
-            type: string
-          com_abs:
-            type: string
-          echelle:
-            type: string
-          code_arr:
-            type: string
-      geometry:
-        $ref: '#/definitions/MultiPolygon'              
-
-  FeatureCollectionDivision:
-    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureDivision`
-    allOf:
-    - $ref: '#/definitions/FeatureCollection'
-    properties:
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureDivision'
-
-  #---------------------------------------------------
-  # /cadastre/parcelle
-  #---------------------------------------------------
-
-  FeatureParcelle:
-    description: 'Une parcelle'
-    allOf:
-    - $ref: '#/definitions/Feature'
-    properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureCommune'
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'
+    
+    #---------------------------------------------------
+    # /cadastre/division
+    #---------------------------------------------------  
+    
+    FeatureDivision:
+      description: Une division
+      allOf:
+      - $ref: '#/components/schemas/Feature'
       properties:
-        type: object
         properties:
-          numero:
-            type: string
-          feuille:
-            type: number
-          section:
-            type: string
-          code_dep:
-            type: string
-          code_com:
-            type: string
-          com_abs:
-            type: string
-          echelle:
-            type: string
-          code_arr:
-            type: string
-      geometry:
-        $ref: '#/definitions/MultiPolygon'
-
-  FeatureCollectionParcelle:
-    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureParcelle`
-    allOf:
-    - $ref: '#/definitions/FeatureCollection'
-    properties:
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureParcelle'
-
-  #---------------------------------------------------
-  # /cadastre/localisant
-  #---------------------------------------------------
-
-  FeatureLocalisant:
-    description: 'Un ponctuel localisant une parcelle cadastrale'
-    allOf:
-    - $ref: '#/definitions/Feature'
-    properties:
+          type: object
+          properties:
+            feuille:
+              type: number
+            section:
+              type: string
+            code_dep:
+              type: string
+            code_com:
+              type: string
+            com_abs:
+              type: string
+            echelle:
+              type: string
+            code_arr:
+              type: string
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon' 
+    FeatureCollectionDivision:
+      description: Une `FeatureCollection` contenant uniquement des features de type `FeatureDivision`
+      allOf:
+      - $ref: '#/components/schemas/FeatureCollection'
       properties:
-        type: object
-        properties:
-          numero:
-            type: string
-          feuille:
-            type: number
-          section:
-            type: string
-          code_dep:
-            type: string
-          code_com:
-            type: string
-          com_abs:
-            type: string
-          echelle:
-            type: string
-          code_arr:
-            type: string
-      geometry:
-        $ref: '#/definitions/Point'
-
-  FeatureCollectionLocalisant:
-    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureLocalisant`
-    allOf:
-    - $ref: '#/definitions/FeatureCollection'
-    properties:
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureLocalisant'
-
-
-  #---------------------------------------------------
-  # /cadastre/feuille
-  #---------------------------------------------------
-            
-  FeatureFeuillePCI:
-    description: 'Une feuille'
-    allOf:
-    - $ref: '#/definitions/Feature'
-    properties:
-      properties:
-        type: object
-        properties:
-          feuille:
-            type: number
-          section:
-            type: string
-          code_dep:
-            type: string
-          nom_comm:
-            type: string
-          code_com:
-            type: string
-          com_abs:
-            type: string
-          echelle:
-            type: string
-          code_arr:
-            type: string
-          code_insee:
-            type: string
-      geometry:
-        $ref: '#/definitions/MultiPolygon'              
-
-  FeatureCollectionFeuillePCI:
-    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureFeuillePCI`
-    allOf:
-    - $ref: '#/definitions/FeatureCollection'
-    properties:
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureFeuillePCI'
-
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureDivision'
   
-  # import definitions
-  FeatureCollection:
-    $ref: './schema/geojson.yml#definitions/FeatureCollection'
-  Feature:
-    $ref: './schema/geojson.yml#definitions/Feature'
-  Geometry:
-    $ref: './schema/geojson.yml#definitions/Geometry'
-  MultiPolygon:
-    $ref: './schema/geojson.yml#definitions/MultiPolygon'
-  Point:
-    $ref: './schema/geojson.yml#definitions/Point'
+    #---------------------------------------------------
+    # /cadastre/parcelle
+    #---------------------------------------------------  
+    
+    FeatureParcelle:
+      description: 'Une parcelle'
+      allOf:
+      - $ref: '#/components/schemas/Feature'
+      properties:
+        properties:
+          type: object
+          properties:
+            numero:
+              type: string
+            feuille:
+              type: number
+            section:
+              type: string
+            code_dep:
+              type: string
+            code_com:
+              type: string
+            com_abs:
+              type: string
+            echelle:
+              type: string
+            code_arr:
+              type: string
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'
+
+    FeatureCollectionParcelle:
+      description: Une `FeatureCollection` contenant uniquement des features de type `FeatureParcelle`
+      allOf:
+      - $ref: '#/components/schemas/FeatureCollection'
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureParcelle'
+            
+    #---------------------------------------------------
+    # /cadastre/localisant
+    #---------------------------------------------------
+  
+    FeatureLocalisant:
+      description: 'Un ponctuel localisant une parcelle cadastrale'
+      allOf:
+      - $ref: '#/components/schemas/Feature'
+      properties:
+        properties:
+          type: object
+          properties:
+            numero:
+              type: string
+            feuille:
+              type: number
+            section:
+              type: string
+            code_dep:
+              type: string
+            code_com:
+              type: string
+            com_abs:
+              type: string
+            echelle:
+              type: string
+            code_arr:
+              type: string
+        geometry:
+          $ref: '#/components/schemas/Point'
+  
+    FeatureCollectionLocalisant:
+      description: Une `FeatureCollection` contenant uniquement des features de type `FeatureLocalisant`
+      allOf:
+      - $ref: '#/components/schemas/FeatureCollection'
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureLocalisant'
+
+    #---------------------------------------------------
+    # /cadastre/feuille
+    #---------------------------------------------------
+              
+    FeatureFeuillePCI:
+      description: 'Une feuille'
+      allOf:
+      - $ref: '#/components/schemas/Feature'
+      properties:
+        properties:
+          type: object
+          properties:
+            feuille:
+              type: number
+            section:
+              type: string
+            code_dep:
+              type: string
+            nom_comm:
+              type: string
+            code_com:
+              type: string
+            com_abs:
+              type: string
+            echelle:
+              type: string
+            code_arr:
+              type: string
+            code_insee:
+              type: string
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'              
+  
+    FeatureCollectionFeuillePCI:
+      description: Une `FeatureCollection` contenant uniquement des features de type `FeatureFeuillePCI`
+      allOf:
+      - $ref: '#/components/schemas/FeatureCollection'
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureFeuillePCI'

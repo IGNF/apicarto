@@ -1,6 +1,7 @@
-swagger: '2.0'
+openapi: '3.0.0'
 
 info:
+  version: '2.7.7'
   title: Module RPG
   description: >
 
@@ -76,204 +77,248 @@ info:
        * Suppression du paramètre *apikey*
        * La géométrie(champ geom) est obligatoire pour les recherches
      
-     
-consumes:
-  - application/json
-produces:
-  - application/json
-
-basePath: /api
 
 paths:
-  /rpg/v1:
+  /api/rpg/v1:
     get:
+      operationId: getV1
       description: |
         Prend une geometrie de type GeoJSON en paramètre d'entrée et renvoie les informations intersectant cette géométrie
         Prend une date qui sera une valeur comprise entre 2010 et 2014 inclus.
         Les champs année et geom sont obligatoires.
-      Paramètres de sorties : Retourne un résultat de Type "FeatureCollection"
       parameters:
 
         - name: annee
           in: query
-          type: integer
-          pattern: '\d{4}'
           required: true
+          schema:
+            type: integer
+            pattern: '\d{4}'
 
         - name: code_cultu
           in: query
-          type: string
           required: false
+          schema:
+            type: string
 
         - name: geom
           in: query
           description: Le champ geom est obligatoire pour la recherche
-          type: string
           required: true
           schema:
-            $ref: "#/definitions/Geometry"
+            $ref: "#/components/schemas/Geometry"
 
         - name: _limit
           in: query
           description: Limite de résultats à afficher (chiffre entre 1 et 1000)
-          type: integer
           required: false
+          schema:
+            type: integer
           
         - name: _start
           in: query
           description: Position pour le début de la recherche
-          type: integer
           required: false
+          schema:
+            type: integer
 
       tags:
         - RPG avant 2015
       responses:
         '200':
           description: "Succès"
-          schema:
-            $ref: "#/definitions/FeatureCollectionRPGAvant2015"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollectionRPGAvant2015"
 
-  /rpg/v2:
+  /api/rpg/v2:
     get:
+      operationId: getV2
       description: |
         Prend une geometrie de type GeoJSON en paramètre d'entrée et renvoie les informations intersectant cette géométrie
         Prend une date qui sera une valeur comprise entre 2015 et 2022 inclus.
         Les champs année et geom sont obligatoires.
         
-      Paramètres de sorties : Retourne un résultat de Type "FeatureCollection"
       parameters:
-      
         - name: annee
           in: query
-          type: integer
-          pattern: '\d{4}'
           required: true
+          schema:
+            type: integer
+            pattern: '\d{4}'
 
         - name: code_cultu
           in: query
-          type: string
           required: false
+          schema:
+            type: string
 
         - name: geom
           in: query
           description: Le champ geom est obligatoire pour la recherche
-          type: string
           required: true
           schema:
-            $ref: "#/definitions/Geometry"
+            $ref: "#/components/schemas/Geometry"
 
         - name: _limit
           in: query
           description: Limite de résultats à afficher (chiffre entre 1 et 1000)
-          type: integer
           required: false
+          schema:
+            type: integer
           
         - name: _start
           in: query
           description: Position pour le début de la recherche
-          type: integer
           required: false
+          schema:
+            type: integer
 
       tags:
         - RPG à partir de 2015
       responses:
         '200':
           description: "Succès"
-          schema:
-            $ref: "#/definitions/FeatureCollectionRPGApartirde2015"
-            
-            
-definitions:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollectionRPGApartirde2015"
 
-  FeatureRPGApartirde2015:
-    description: "Objet géographique RPG à partir de 2015" 
-    type: object
-    allOf:
-      - $ref: "#/definitions/Feature"
-    properties:
-      properties:
-        type: object
-        properties:
-          id_parcel:
-            type: string        
-          surf_parc:
-            type: string
-          code_cultu:
-            type: string
-          code_group:
-            type: string
-          culture_d1:
-            type: string
-          culture_d2:
-            type: string
-
-      geometry:
-        $ref: '#/definitions/MultiPolygon'
-
-  FeatureCollectionRPGApartirde2015:
-    description: "Liste d'objet géographique RPG"
-    type: object
-    properties:
-      type: 
-        type: string
-        enum:
-        - FeatureCollection
-      features:
+components:            
+  schemas:
+      Coordinate:
         type: array
         items:
-          $ref: '#/definitions/FeatureRPGApartirde2015'
+          type: number
+        minItems: 2
+        maxItems: 4
+      Geometry:
+        type: object
+        description: Une `Geometry` au sens GeoJSON
+        properties:
+          type:
+            type: string
+            description: Le type géométrique
+            enum:
+              - Point
+              - LineString
+              - Polygon
+              - MultiPoint
+              - MultiLineString
+              - MultiPolygon
+          coordinates:
+            type: array
+            items: {}
+      Feature:
+        type: object
+        description: Une `Feature` au sens GeoJSON
+        properties:
+          type:
+            type: string
+            description: Le type d'objet GeoJSON (`Feature`)
+          id:
+            type: string
+          geometry:
+            $ref: '#/components/schemas/Geometry'
+      FeatureCollection:
+        type: object
+        description: Une `FeatureCollection` au sens GeoJSON
+        properties:
+          type:
+            type: string
+            description: Le type d'objet GeoJSON (`FeatureCollection`)
+          features:
+            type: array
+            items: {}
+      MultiPolygon:
+        type: object
+        description: Un `MultiPolygon` au sens GeoJSON
+        properties:
+          type:
+            type: string
+            description: Le type géométrique (`MultiPolygon`)
+          coordinates:
+            type: array
+            items: {}
 
-  FeatureRPGAvant2015:
-    description: "Objet géographique RPG avant 2015" 
-    type: object
-    allOf:
-      - $ref: "#/definitions/Feature"
-    properties:
-      properties:
+      FeatureRPGApartirde2015:
+        description: "Objet géographique RPG à partir de 2015" 
+        type: object
+        allOf:
+          - $ref: "#/components/schemas/Feature"
+        properties:
+          properties:
+            type: object
+            properties:
+              id_parcel:
+                type: string        
+              surf_parc:
+                type: string
+              code_cultu:
+                type: string
+              code_group:
+                type: string
+              culture_d1:
+                type: string
+              culture_d2:
+                type: string
+    
+          geometry:
+            $ref: '#/components/schemas/MultiPolygon'
+    
+      FeatureCollectionRPGApartirde2015:
+        description: "Liste d'objet géographique RPG"
         type: object
         properties:
-          num_ilot:
-            type: string        
-          commune:
+          type: 
             type: string
-          forme_juri:
+            enum:
+            - FeatureCollection
+          features:
+            type: array
+            items:
+              $ref: '#/components/schemas/FeatureRPGApartirde2015'
+    
+      FeatureRPGAvant2015:
+        description: "Objet géographique RPG avant 2015" 
+        type: object
+        allOf:
+          - $ref: "#/components/schemas/Feature"
+        properties:
+          properties:
+            type: object
+            properties:
+              num_ilot:
+                type: string        
+              commune:
+                type: string
+              forme_juri:
+                type: string
+              surf_decla:
+                type: string
+              dep_rattach:
+                type: string
+              surf_cultu:
+                type: string
+              code_cultu:
+                type: string
+              nom_cultu:
+                type: string
+    
+          geometry:
+            $ref: '#/components/schemas/MultiPolygon'
+    
+      FeatureCollectionRPGAvant2015:
+        description: "Liste d'objet géographique RPG"
+        type: object
+        properties:
+          type: 
             type: string
-          surf_decla:
-            type: string
-          dep_rattach:
-            type: string
-          surf_cultu:
-            type: string
-          code_cultu:
-            type: string
-          nom_cultu:
-            type: string
-
-      geometry:
-        $ref: '#/definitions/MultiPolygon'
-
-  FeatureCollectionRPGAvant2015:
-    description: "Liste d'objet géographique RPG"
-    type: object
-    properties:
-      type: 
-        type: string
-        enum:
-        - FeatureCollection
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureRPGAvant2015'
-          
-          
-# import definitions
-  FeatureCollection:
-    $ref: './schema/geojson.yml#definitions/FeatureCollection'
-  Feature:
-    $ref: './schema/geojson.yml#definitions/Feature'
-  Geometry:
-    $ref: './schema/geojson.yml#definitions/Geometry'
-  MultiPolygon:
-    $ref: './schema/geojson.yml#definitions/MultiPolygon'
-
-  
+            enum:
+            - FeatureCollection
+          features:
+            type: array
+            items:
+              $ref: '#/components/schemas/FeatureRPGAvant2015'
+      

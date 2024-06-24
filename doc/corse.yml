@@ -1,5 +1,6 @@
-swagger: '2.0'
+openapi: '3.0.0'
 info:
+  version: '2.7.7'
   title: Module Ressources Corse
   description: >
 
@@ -15,14 +16,10 @@ info:
   contact:
     name: Api Carto Dreal Corse
 
-produces:
-  - application/json
-
-basePath: /api
-
 paths:
-  /corse/foretcorse:
+  /api/corse/foretcorse:
     get:
+      operationId: getForetCorse
       summary: Recherche des zones en Corse sur les Forêts bénéficiant du régime forestier
       description: Retourne un résultat de Type "FeatureCollection"
       tags:
@@ -31,48 +28,57 @@ paths:
 
         - name: ccod_frt
           in: query
-          type: string
           required: false
+          schema:
+            type: string
 
         - name: llib_frt
           in: query
-          type: string
           required: false
+          schema:
+            type: string
         
         - name: propriete
           in: query
-          type: string
           required: false
+          schema:
+            type: string
 
         - name: s_sig_ha
           in: query
-          type: string
           required: false
+          schema:
+            type: string
         
         - name: nom_fore
           in: query
-          type: string
           required: false
+          schema:
+            type: string
         
         - name: dpt
           in: query
-          type: string
           required: false
+          schema:
+            type: string
 
         - name: geom
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/definitions/Geometry'
+            $ref: '#/components/schemas/Geometry'
         
       responses:
         '200':
           description: Success
-          schema:
-            $ref: '#/definitions/FeatureCollectionCorseForet'
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/FeatureCollectionCorseForet'
 
-  /corse/pechecorse:
+  /api/corse/pechecorse:
     get:
+      operationId: getPecheCorse
       summary: Recherche des zones de pêche en Corse
       description: Retourne un résultat de Type "FeatureCollection"
       tags:
@@ -80,132 +86,184 @@ paths:
       parameters:
         - name: dpt
           in: query
-          type: string
           required: false
+          schema:
+            type: string
 
         - name: geom
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/definitions/Geometry'
+            $ref: '#/components/schemas/Geometry'
         
       responses:
         '200':
           description: Success
-          schema:
-            $ref: '#/definitions/FeatureCollectionCorsePeche'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureCollectionCorsePeche'
 
-  /corse/search:
+  /api/corse/search:
     get:
+      operationId: getSearch
       description: |
         Prend une geometrie de type GeoJSON en paramètre d'entrée et renvoie les informations intersectant cette géométrie
         Prend la source de donnée issue de https://georchestra.ac-corse.fr/geoserver/ à interroger en paramètre d'entrée
-      Paramètres de sorties : Retourne un résultat de Type "FeatureCollection"
       tags:
         - Touslesflux
       parameters:
         - name: source
           in: query
           description: Source des données geochestra.ac-corse
-          type: string
           required: true
+          schema:
+            type: string
 
         - name: geom
           in: query
           required: true
           schema:
-            $ref: "#/definitions/Geometry"
+            $ref: "#/components/schemas/Geometry"
         
       responses:
         '200':
           description: Success
   
-
-definitions:
-
- #---------------------------------------------------
-  # /Corse Forêt/
-  #---------------------------------------------------
-            
-  FeatureCorseForet:
-    description: 'Corse Forêt'
-    allOf:
-      - $ref: '#/definitions/Feature'
-    properties:
+  
+components:
+  schemas:
+    Geometry:
+      type: object
+      description: Une `Geometry` au sens GeoJSON
       properties:
-        type: object
-        properties:
-          ccod_frt:
-            type: string
-          llib_frt:
-            type: string
-          propriete:
-            type: string
-          s_sig_ha:
-            type: number
-          nom_fore:
-            type: string
-          dept: 
-            type: string
-      geometry:
-        $ref: '#/definitions/MultiPolygon'  
-
-
-  #---------------------------------------------------
-  # /corse Pêche
-  #---------------------------------------------------
-            
-  FeatureCorsePeche:
-    description: 'Dreal Corse Pêche'
-    allOf:
-      - $ref: '#/definitions/Feature'
-    properties:
+        type:
+          type: string
+          description: Le type géométrique
+          enum:
+            - Point
+            - LineString
+            - Polygon
+            - MultiPoint
+            - MultiLineString
+            - MultiPolygon
+        coordinates:
+          type: array
+          items: {}
+    Feature:
+      type: object
+      description: Une `Feature` au sens GeoJSON
       properties:
-        type: object
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`Feature`)
+        id:
+          type: string
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+    FeatureCollection:
+      type: object
+      description: Une `FeatureCollection` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`FeatureCollection`)
+        features:
+          type: array
+          items: {}
+    Point:
+      type: object
+      description: Un `Point` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type géométrique (`Point`)
+          enum:
+            - Point
+        coordinates:
+          $ref: '#/components/schemas/Coordinate'
+    MultiPolygon:
+      type: object
+      description: Un `MultiPolygon` au sens GeoJSON
+      properties:
+        type:
+          type: string
+          description: Le type géométrique (`MultiPolygon`)
+        coordinates:
+          type: array
+          items: {}
+          
+    #---------------------------------------------------
+    # /Corse Forêt/
+    #---------------------------------------------------
+              
+    FeatureCorseForet:
+      description: 'Corse Forêt'
+      allOf:
+        - $ref: '#/components/schemas/Feature'
+      properties:
         properties:
-          designatio:
-            type: string
-          dpt:
-            type: string
-          date_arr:
-            type: string
-          date_fin:
-            type: string
-          id_repe:
-            type: integer
-          st_length:
-            type: number
-      geometry:
-        $ref: '#/definitions/MultiPolygon'              
-
-  FeatureCollectionCorsePeche:
-    description: Une `FeatureCollection`
-    allOf:
-      - $ref: '#/definitions/FeatureCollection'
-    properties:
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureCorsePeche'
-
-  FeatureCollectionCorseForet:
-    description: Une `FeatureCollection`
-    allOf:
-      - $ref: '#/definitions/FeatureCollection'
-    properties:
-      features:
-        type: array
-        items:
-          $ref: '#/definitions/FeatureCorseForet'
-
-  # import definitions
-  FeatureCollection:
-    $ref: './schema/geojson.yml#definitions/FeatureCollection'
-  Feature:
-    $ref: './schema/geojson.yml#definitions/Feature'
-  Geometry:
-    $ref: './schema/geojson.yml#definitions/Geometry'
-  MultiPolygon:
-    $ref: './schema/geojson.yml#definitions/MultiPolygon'
-  Point:
-    $ref: './schema/geojson.yml#definitions/Point'
+          type: object
+          properties:
+            ccod_frt:
+              type: string
+            llib_frt:
+              type: string
+            propriete:
+              type: string
+            s_sig_ha:
+              type: number
+            nom_fore:
+              type: string
+            dept: 
+              type: string
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'  
+  
+  
+    #---------------------------------------------------
+    # /corse Pêche
+    #---------------------------------------------------
+              
+    FeatureCorsePeche:
+      description: 'Dreal Corse Pêche'
+      allOf:
+        - $ref: '#/components/schemas/Feature'
+      properties:
+        properties:
+          type: object
+          properties:
+            designatio:
+              type: string
+            dpt:
+              type: string
+            date_arr:
+              type: string
+            date_fin:
+              type: string
+            id_repe:
+              type: integer
+            st_length:
+              type: number
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'              
+  
+    FeatureCollectionCorsePeche:
+      description: Une `FeatureCollection`
+      allOf:
+        - $ref: '#/components/schemas/FeatureCollection'
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureCorsePeche'
+  
+    FeatureCollectionCorseForet:
+      description: Une `FeatureCollection`
+      allOf:
+        - $ref: '#/components/schemas/FeatureCollection'
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureCorseForet'      

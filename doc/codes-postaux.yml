@@ -1,5 +1,6 @@
-swagger: '2.0'
+openapi: '3.0.0'
 info:
+  version: '2.7.7'
   title: API Carto - codes-postaux
   description: >
     API de récupération des communes associées à un code postal donné. Voir https://github.com/BaseAdresseNationale/codes-postaux pour plus d'information sur les sources de données.
@@ -10,24 +11,18 @@ info:
 
     Dernière mise à jour des données : 1er Mars 2023
 
-consumes:
-  - application/json
-
-basePath: /api
-
-produces:
-  - application/json
-
 paths:
-  /codes-postaux/communes/{codePostal}:
+  /api/codes-postaux/communes/{codePostal}:
     get:
+      operationId: getCommunesByCodePostal
       description: Renvoie les communes correspondant à un code postal
       parameters:
         - in: path
           name: codePostal
-          type: string
           required: true
           description: Code postal de la commune.
+          schema:
+            type: string
       tags:
         - codes-postaux
       responses:
@@ -38,22 +33,23 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/definitions/Commune'
+                  $ref: '#/components/schemas/Commune'
 
-definitions:
-  Commune:
-    type: object
-    description: Commune correspondant au code postal
-    properties:
-      codePostal:
-        type: string
-        description: Le code postal
-      codeCommune:
-        type: string
-        description: Le code INSEE de la commune
-      nomCommune:
-        type: string
-        description: Le nom de la commune
-      libelleAcheminement:
-        type: string
-        description: Le libellé d'acheminement
+components:
+  schemas:
+    Commune:
+      type: object
+      description: Commune correspondant au code postal
+      properties:
+        codePostal:
+          type: string
+          description: Le code postal
+        codeCommune:
+          type: string
+          description: Le code INSEE de la commune
+        nomCommune:
+          type: string
+          description: Le nom de la commune
+        libelleAcheminement:
+          type: string
+          description: Le libellé d'acheminement
