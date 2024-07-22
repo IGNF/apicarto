@@ -1,4 +1,4 @@
-openapi: '3.0.0'
+openapi: '3.1.0'
 info:
   version: '2.7.7'
   title: Module urbanisme (GpU)
@@ -30,6 +30,8 @@ info:
   contact:
     name: API Carto GPU
 
+servers:
+  - url: https://apicarto.ign.fr
 paths:
 
   /api/gpu/municipality:

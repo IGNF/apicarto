@@ -1,4 +1,4 @@
-openapi: '3.0.0'
+openapi: '3.1.0'
 info:
   version : '2.7.7'
   title: Module Espace revendeur
@@ -16,6 +16,8 @@ info:
   contact:
     name: API Carto Espace revendeur
 
+servers:
+  - url: https://apicarto.ign.fr
 paths:
   /api/er/product:
     get:

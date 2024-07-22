@@ -1,4 +1,4 @@
-openapi: '3.0.0'
+openapi: '3.1.0'
 info:
   version: '2.7.7'
   title: API Carto Appellations viticoles
@@ -41,6 +41,8 @@ info:
 
         `{"type":"LineString","coordinates":[[4.681549,47.793784],[4.741974,47.788248]]}`
 
+servers:
+  - url: https://apicarto.ign.fr
 paths:
   /api/aoc/appellation-viticole:
     post:
