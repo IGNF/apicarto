@@ -26,18 +26,69 @@ function createWfsProxy() {
             if( typeof params._limit == 'undefined') {params._limit = 1000;}
            
             /* requête WFS GPP*/
-            req.gppWfsClient.getFeatures(featureTypeName, params)
-                /* uniformisation des attributs en sortie */
-                .then(function(featureCollection){
-                    featureCollection.features.forEach(function(feature){
-                        if ( ! feature.properties.code_insee ){
-                            feature.properties.code_insee = feature.properties.code_dep+feature.properties.code_com;
-                        }
-                    });
-                    return featureCollection;
-                })
+            req.gppWfsClient.getDescribeFeatureType(featureTypeName)
+                //récupération du geomFieldName
                 .then(function(featureCollection) {
-                    res.json(featureCollection);
+                    var nom_geom = false;
+                    for(var i in featureCollection.featureTypes[0].properties) {
+                        if(featureCollection.featureTypes[0].properties[i].name == "geom"
+                        || featureCollection.featureTypes[0].properties[i].name == "the_geom")
+                        {
+                            nom_geom = featureCollection.featureTypes[0].properties[i].name;
+                            break;
+                        }
+                    }
+                    if(!nom_geom) {
+                        for(var i in featureCollection.featureTypes[0].properties) {
+                            if(featureCollection.featureTypes[0].properties[i].type.match("Point")
+                            || featureCollection.featureTypes[0].properties[i].type.match("Polygon")
+                            || featureCollection.featureTypes[0].properties[i].type.match("LineString"))
+                            {
+                                nom_geom = featureCollection.featureTypes[0].properties[i].name;
+                            }
+                        }    
+                    }
+
+                    req.gppWfsClient.defaultGeomFieldName = nom_geom;
+
+                    //récupération du CRS
+                    req.gppWfsClient.getCapabilities()
+                        .then(function(response){
+                            var crs = "urn:ogc:def:crs:EPSG::4326";
+                            var regexp = new RegExp("<Name>" + featureTypeName + ".*?<\/DefaultCRS>");
+                            if(response.match(regexp)) {
+                                var feat = response.match(regexp)[0];
+                                if(feat.match(/EPSG::[0-9]{4,5}/)) {
+                                    crs = feat.match(/EPSG::[0-9]{4,5}/)[0].replace("::",":");
+                                }
+                            }
+                            req.gppWfsClient.defaultCRS = crs;
+
+                            //récupération des features
+                            req.gppWfsClient.getFeatures(featureTypeName, params)
+                            /* uniformisation des attributs en sortie */
+                            .then(function(featureCollection){
+                                featureCollection.features.forEach(function(feature){
+                                    if ( ! feature.properties.code_insee ){
+                                        feature.properties.code_insee = feature.properties.code_dep+feature.properties.code_com;
+                                    }
+                                });
+                                return featureCollection;
+                            })
+                            .then(function(featureCollection) {
+                                res.json(featureCollection);
+                            })
+                            .catch(function(err) {
+                                res.status(500).json(err);
+                            })
+                            ;
+                        })
+                        .catch(function(err) {
+                            res.status(500).json(err);
+                        })
+                    ;
+
+                    
                 })
                 .catch(function(err) {
                     res.status(500).json(err);
