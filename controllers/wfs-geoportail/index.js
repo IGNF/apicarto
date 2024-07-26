@@ -33,23 +33,24 @@ function createWfsProxy() {
                 req.gppWfsClient.defaultCRS = myCache.get(featureTypeName)[1];
 
                 //récupération des features
-                req.gppWfsClient.getFeatures(featureTypeName, params)
-                /* uniformisation des attributs en sortie */
-                .then(function(featureCollection){
-                    featureCollection.features.forEach(function(feature){
-                        if ( ! feature.properties.code_insee ){
-                            feature.properties.code_insee = feature.properties.code_dep+feature.properties.code_com;
-                        }
-                    });
-                    return featureCollection;
-                })
-                .then(function(featureCollection) {
-                    res.json(featureCollection);
-                })
-                .catch(function(err) {
-                    res.status(500).json(err);
-                })
-                ;
+                getFeat(req, res, featureTypeName, params);
+                // req.gppWfsClient.getFeatures(featureTypeName, params)
+                // /* uniformisation des attributs en sortie */
+                // .then(function(featureCollection){
+                //     featureCollection.features.forEach(function(feature){
+                //         if ( ! feature.properties.code_insee ){
+                //             feature.properties.code_insee = feature.properties.code_dep+feature.properties.code_com;
+                //         }
+                //     });
+                //     return featureCollection;
+                // })
+                // .then(function(featureCollection) {
+                //     res.json(featureCollection);
+                // })
+                // .catch(function(err) {
+                //     res.status(500).json(err);
+                // })
+                // ;
             }
             else {
                 /* requête WFS GPP*/
@@ -98,23 +99,24 @@ function createWfsProxy() {
                             myCache.set(featureTypeName, [nom_geom, crs]);
 
                             //récupération des features
-                            req.gppWfsClient.getFeatures(featureTypeName, params)
-                            /* uniformisation des attributs en sortie */
-                            .then(function(featureCollection){
-                                featureCollection.features.forEach(function(feature){
-                                    if ( ! feature.properties.code_insee ){
-                                        feature.properties.code_insee = feature.properties.code_dep+feature.properties.code_com;
-                                    }
-                                });
-                                return featureCollection;
-                            })
-                            .then(function(featureCollection) {
-                                res.json(featureCollection);
-                            })
-                            .catch(function(err) {
-                                res.status(500).json(err);
-                            })
-                            ;
+                            getFeat(req, res, featureTypeName, params);
+                            // req.gppWfsClient.getFeatures(featureTypeName, params)
+                            // /* uniformisation des attributs en sortie */
+                            // .then(function(featureCollection){
+                            //     featureCollection.features.forEach(function(feature){
+                            //         if ( ! feature.properties.code_insee ){
+                            //             feature.properties.code_insee = feature.properties.code_dep+feature.properties.code_com;
+                            //         }
+                            //     });
+                            //     return featureCollection;
+                            // })
+                            // .then(function(featureCollection) {
+                            //     res.json(featureCollection);
+                            // })
+                            // .catch(function(err) {
+                            //     res.status(500).json(err);
+                            // })
+                            // ;
                         })
                         .catch(function(err) {
                             res.status(500).json(err);
@@ -131,6 +133,40 @@ function createWfsProxy() {
         }
     ];
 }
+
+var getFeat = function(req, res, featureTypeName, params) {
+    req.gppWfsClient.getFeatures(featureTypeName, params)
+    /* uniformisation des attributs en sortie */
+    .then(function(featureCollection){
+        featureCollection.features.forEach(function(feature){
+            if ( ! feature.properties.code_insee ){
+                feature.properties.code_insee = feature.properties.code_dep+feature.properties.code_com;
+            }
+        });
+        if(featureCollection.links && featureCollection.links.length) {
+            for(let i in featureCollection.links) {
+                if(featureCollection.links[i].href && featureCollection.links[i].href.match(/STARTINDEX\=[0-9]*/)) {
+                    let num = featureCollection.links[i].href.match(/STARTINDEX\=[0-9]*/)[0].replace("STARTINDEX=","");
+                    let href = req.gppWfsClient.headers.Referer.replace(/\/api.*/, "") + req.originalUrl;
+                    if(href.match("_start")) {
+                    href = href.replace(/_start\=[0-9]*/, "_start=" + num);
+                    } else {
+                        href += "&_start=" + num;
+                    }
+                    featureCollection.links[i].href = href;
+                }
+            }
+        }
+        return featureCollection;
+    })
+    .then(function(featureCollection) {
+        res.json(featureCollection);
+    })
+    .catch(function(err) {
+        res.status(500).json(err);
+    })
+    ;
+};
 
 
 var corsOptionsGlobal = function(origin,callback) {
