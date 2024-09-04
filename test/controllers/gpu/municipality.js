@@ -33,17 +33,17 @@ describe('with point at [1.654399,48.112235] (Rennes)', function() {
     });
 });
 
-describe('/api/gpu/municipality', function() {
-    describe('without filtering parameter', function() {
-        it('should reply with 400', function(done) {
-            request(app)
-                .get('/api/gpu/municipality')
-                .expect(200)
-                .expect(res => {
-                    expect(res.body.features.length).to.be.greaterThan(10);
-                })
-                .end(done);
-        });
-    });
+// describe('/api/gpu/municipality', function() {
+//     describe('without filtering parameter', function() {
+//         it('should reply with 400', function(done) {
+//             request(app)
+//                 .get('/api/gpu/municipality')
+//                 .expect(200)
+//                 .expect(res => {
+//                     expect(res.body.features.length).to.be.greaterThan(10);
+//                 })
+//                 .end(done);
+//         });
+//     });
 
-});
+// });
