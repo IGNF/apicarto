@@ -25,6 +25,7 @@ const EXPECTED_PROPERTIES = [
     "front_image",
     "full_description",
     "has_geometry",
+    "is_manufactured",
     "keywords",
     "name",
     "name_complement",
