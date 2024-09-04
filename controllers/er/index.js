@@ -180,6 +180,7 @@ var erValidators = [
 ];
 
 var productValidators = erValidators.concat([
+    check('is_manufactured').optional().isBoolean(),
     check('code_ean').optional().isAlphanumeric(),
     check('code_article').optional().isString(),
     check('name').optional().isString(),
