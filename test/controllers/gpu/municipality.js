@@ -3,6 +3,21 @@ import request from 'supertest';
 import expect from 'expect.js';
 import { app } from '../../../app.js';
 
+describe('with insee=25349', function() {
+    it('should reply with a valid feature', function(done) {
+        request(app)
+            .get('/api/gpu/municipality?insee=25349')
+            .expect(200)
+            .expect(res => {
+                expect(res.body.features.length).to.eql(1);
+                const feature = res.body.features[0];
+                expect(feature.properties.name).to.eql('LORAY');
+            })
+            .end(done);
+        ;
+    });
+});
+
 describe('/api/gpu/municipality', function() {
     describe('without filtering parameter', function() {
         it('should reply with 400', function(done) {
@@ -13,21 +28,6 @@ describe('/api/gpu/municipality', function() {
                     expect(res.body.features.length).to.be.greaterThan(10);
                 })
                 .end(done);
-        });
-    });
-
-    describe('with insee=25349', function() {
-        it('should reply with a valid feature', function(done) {
-            request(app)
-                .get('/api/gpu/municipality?insee=25349')
-                .expect(200)
-                .expect(res => {
-                    expect(res.body.features.length).to.eql(1);
-                    const feature = res.body.features[0];
-                    expect(feature.properties.name).to.eql('LORAY');
-                })
-                .end(done);
-            ;
         });
     });
 
