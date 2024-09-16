@@ -39,7 +39,7 @@ La connexion à la base postgresql est configurée à l'aide des variables d'env
 |-----------------------|--------------------|-------------------|--------------------|
 | Géoportail            | Flux WFS | Cadastre <br/> RPG <br/> Nature <br/> WFS-Geoportail | [Geoservices](https://geoservices.ign.fr/services-web-experts) |
 | GPU                   | Flux WFS | GPU                                   | [Géoportail de l'urbanisme](https://www.geoportail-urbanisme.gouv.fr/) |
-| Base adresse nationale | v4.0.0  | Codes Postaux                         | [BAN](https://github.com/baseadressenationale/codes-postaux) |
+| Base adresse nationale | v4.1.0  | Codes Postaux                         | [BAN](https://github.com/baseadressenationale/codes-postaux) |
 | Base des appellations viticoles | Flux WFS | Appellations viticoles      | [FranceAgriMer](https://www.franceagrimer.fr/filieres-Vin-et-cidre/Vin/Professionnels/Teleprocedures) |
 
 
