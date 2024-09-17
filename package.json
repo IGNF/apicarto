@@ -1,6 +1,6 @@
 {
   "name": "apicarto",
-  "version": "v2.7.4",
+  "version": "v2.7.8",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -29,7 +29,7 @@
     "axios": "^1.7.2",
     "body-parser": "^1.20.0",
     "bunyan": "^1.8.15",
-    "codes-postaux": "^4.1.0",
+    "codes-postaux": "^4.1.1",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
     "ejs": "^3.1.10",

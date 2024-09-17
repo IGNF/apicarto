@@ -29,22 +29,20 @@ function createNaturaProxy(featureTypeName){
             req.gppWfsClient.getFeatures(featureTypeName, params)
                 /* uniformisation des attributs en sortie */
                 .then(function(featureCollection){
-                    featureCollection.features.forEach(function(feature){
-                        if(featureCollection.links && featureCollection.links.length) {
-                            for(let i in featureCollection.links) {
-                                if(featureCollection.links[i].href && featureCollection.links[i].href.match(/STARTINDEX\=[0-9]*/)) {
-                                    let num = featureCollection.links[i].href.match(/STARTINDEX\=[0-9]*/)[0].replace('STARTINDEX=','');
-                                    let href = req.gppWfsClient.headers.Referer.replace(/\/api.*/, '') + req.originalUrl;
-                                    if(href.match('_start')) {
-                                        href = href.replace(/_start\=[0-9]*/, '_start=' + num);
-                                    } else {
-                                        href += '&_start=' + num;
-                                    }
-                                    featureCollection.links[i].href = href;
+                    if(featureCollection.links && featureCollection.links.length) {
+                        for(let i in featureCollection.links) {
+                            if(featureCollection.links[i].href && featureCollection.links[i].href.match(/STARTINDEX\=[0-9]*/)) {
+                                let num = featureCollection.links[i].href.match(/STARTINDEX\=[0-9]*/)[0].replace('STARTINDEX=','');
+                                let href = req.gppWfsClient.headers.Referer.replace(/\/api.*/, '') + req.originalUrl;
+                                if(href.match('_start')) {
+                                    href = href.replace(/_start\=[0-9]*/, '_start=' + num);
+                                } else {
+                                    href += '&_start=' + num;
                                 }
+                                featureCollection.links[i].href = href;
                             }
                         }
-                    });
+                    }
                     return featureCollection;
                 })
                 .then(function(featureCollection) {
