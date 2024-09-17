@@ -110,6 +110,11 @@ paths:
           description: liste des propriétes à afficher séparées par un ;
           type: string
           require: false
+
+        - name: is_manufactured
+          in: query
+          type: boolean
+          require: false
            
 
       
