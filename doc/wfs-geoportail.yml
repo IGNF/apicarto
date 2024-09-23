@@ -1,7 +1,7 @@
 swagger: '2.0'
 
 info:
-  title: Module pour rechercher dans tous les flux WFS Géoportail (Version Bêta)
+  title: Module pour rechercher dans tous les flux WFS Géoportail
   description: >
 
     Ce module permet d’intersecter toute couche WFS du géoportail exprimée dans le référentiel géographique WGS84 **EPSG:4326** avec la géométrie passée en paramètre.

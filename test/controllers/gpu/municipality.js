@@ -45,5 +45,4 @@ describe('with point at [1.654399,48.112235] (Rennes)', function() {
 //                 .end(done);
 //         });
 //     });
-
 // });

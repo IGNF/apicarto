@@ -127,7 +127,7 @@ function createErProxy(featureTypeName,typeSearch){
                     params.title = params.title.toUpperCase();
                 }
                 if (params.zip_codes) {
-                    params.zip_codes = '"[\\"'+ params.zip_codes.replace(',' , ',\\"') + '\\"]"';
+                    params.zip_codes = '["'+ params.zip_codes.replace(',' , '","') + '"]';
                 }
             }
             /* Value default pour _limit an _start */
