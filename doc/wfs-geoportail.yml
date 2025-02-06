@@ -4,11 +4,9 @@ info:
   title: Module pour rechercher dans tous les flux WFS Géoportail
   description: >
 
-    Ce module permet d’intersecter toute couche WFS du géoportail exprimée dans le référentiel géographique WGS84 **EPSG:4326** avec la géométrie passée en paramètre.
+    Ce module permet d’intersecter les couche WFS du géoportail.
     
     Un tri sémantique sur un attribut devra être fait en aval par l'application cliente.
-
-    Note : les flux exprimés dans un référentiel autre que EPSG:4326 ne sont pas interrogeables via ce module actuellement
 
     Toutes les requêtes du module peuvent se faire en POST ou en GET. 
 
@@ -20,11 +18,6 @@ info:
     ## Couche source
 
       Les couches WFS disponibles sur le géoportail peuvent être listée via l’URL [https://data.geopf.fr/wfs/ows?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetCapabilities](https://data.geopf.fr/wfs/ows?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetCapabilities) 
-
-      Actuellement seules les couches exprimées dans le référentiel WGS84 (EPSG:4326) peuvent être utilisées. 
-      Il est possible de vérifier le référentiel d’une couche en consultant la valeur de la balise `<DefaultCRS>`. 
-
-      Valeur du référentiel géographique (CRS) des flux utilisables par le module : `<DefaultCRS>urn:ogc:def:crs:EPSG::4326</DefaultCRS>`
       
       Le nom technique de la couche source doit être utilisé. Celui-ci est indiqué par la balise `<Name>`.
 
@@ -53,17 +46,11 @@ info:
          `{"type":"LineString","coordinates":[[4.681549,47.793784],[4.741974,47.788248]]}`
       
 
-
-    **<u>Avertissement :**</u> Pour le fonctionnement de l’API, la géométrie de la couche doit être nommée « the_geom ». Certaines couches, en particulier celles de la BD Topo® ne respectent pas cette norme, ce qui interdit actuellement d’utiliser ces couches avec API Carto.
-      
-      Pour vérifier le nom du champ géométrique utilisez DescribeFeatureType avec l'exemple de la requête ci-dessous sur la couche CADASTRALPARCELS.PARCELLAIRE_EXPRESS:parcelle.
-      
-      [https://data.geopf.fr/wfs/ows?SERVICE=WFS&VERSION=2.0.0&REQUEST=DescribeFeatureType&TYPENAME=CADASTRALPARCELS.PARCELLAIRE_EXPRESS:parcelle&outputFormat=application/json](https://data.geopf.fr/wfs/ows?SERVICE=WFS&VERSION=2.0.0&REQUEST=DescribeFeatureType&TYPENAME=CADASTRALPARCELS.PARCELLAIRE_EXPRESS:parcelle&outputFormat=application/json) 
-
       ## Historique des changements
 
       * Utilisation des flux WFS de la geoplateforme
       * Suppression du paramètre *apikey*
+      * Suppression des contraintes sur le nom de la géométrie et le CRS
 
 consumes:
   - application/json

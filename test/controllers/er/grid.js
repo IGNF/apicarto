@@ -4,7 +4,6 @@ import expect from 'expect.js';
 import { app } from '../../../app.js';
 
 const EXPECTED_PROPERTIES = [
-    "children",
     "deleted",
     "name",
     "title",
@@ -60,8 +59,7 @@ describe('Testing /api/er/grid', function() {
                     expect(feature.properties.type).to.eql('municipality');
                     expect(feature.properties.zip_codes).to.eql('[\"01270\"]');
                     expect(feature.properties.title).to.eql('BEAUPONT');
-                    expect(feature.properties.deleted).to.eql('false');
-                    expect(feature.properties.children).to.eql('[]');
+                    expect(feature.properties.deleted).to.eql(false);
 
                     expect(feature.bbox).to.eql(
                         [5.23331158,

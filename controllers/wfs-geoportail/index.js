@@ -86,15 +86,13 @@ function createWfsProxy() {
                             })
                             .catch(function(err) {
                                 res.status(500).json(err);
-                            })
-                        ;
+                            });
 
                         
                     })
                     .catch(function(err) {
                         res.status(500).json(err);
-                    })
-                ;
+                    });
             }
         }
     ];
@@ -161,7 +159,7 @@ var corsOptionsGlobal = function(origin,callback) {
  * TODO Principe à valider (faire un middleware de renommage des paramètres si l'approche est trop violente)
  */
 var moduleValidator = [
-    check('source').exists().withMessage('Le paramètre source pour le nom de la couche WFS géoportail  est obligatoire'),
+    check('source').exists().withMessage('Le paramètre source pour le nom de la couche WFS géoportail est obligatoire'),
     check('geom').optional().custom(isGeometry),
     check('_limit').optional().isNumeric(),
     check('_start').optional().isNumeric()

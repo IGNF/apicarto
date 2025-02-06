@@ -1,0 +1,143 @@
+swagger: '2.0'
+info:
+  title: Module BDUni
+  description: >
+
+    Le service d'interrogation BDUni permet d'obtenir des informations sur les tronçons de route les plus proches d'un point.
+    
+    Toutes les réponses sont au format GeoJSON et de type FeatureCollection.
+
+    Toutes les requêtes du module BDUni doivent se faire en GET. 
+
+    Sur cette page, vous pouvez uniquement tester les modules avec des requêtes en GET.
+
+
+    **Exemple de géométrie : (référentiel EPSG:4326)**
+
+      * Point: 
+        
+        `{"type": "Point","coordinates":[-1.691634,48.104237]}`
+  
+  contact:
+    name: API Carto BDUni
+
+produces:
+  - application/json
+
+basePath: /api
+
+paths:
+  /bduni/troncon:
+    get:
+      summary: Récupération des tronçons de route les plus proches
+      description: |
+        Renvoie une liste de résultats contenant les données d'un troncon de route bduni à partir d'une coordonnée en longitude/latitude.
+        Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
+      parameters:
+
+        - name: lon
+          in: query
+          description: 'Longitude (ex : 4.829214)'
+          type: number
+          required: false
+
+        - name: lat
+          in: query
+          description: 'Latitude (ex : 45.996981)'
+          type: number
+          required: false
+
+        - name: distance
+          in: query
+          description: 'Distance de recherche en mètres'
+          default : 100
+          placeholder: 100
+          type: number
+          required: false
+        
+        - name: geom
+          in: query
+          description: Géométrie au format GeoJson
+          schema:
+            $ref: '#/definitions/Geometry'
+
+        - name: _limit
+          in: query
+          description: Limite de résultats à afficher(chiffre entre 1 et 1000)
+          type: integer
+          required: false
+          
+        - name: _start
+          in: query
+          description: Position pour le début de la recherche
+          type: integer
+          required: false
+           
+      
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/FeatureCollectionTroncon'
+
+            
+
+definitions:
+
+  #---------------------------------------------------
+  # /bduni/troncon/
+  #---------------------------------------------------
+  
+  FeatureTroncon:
+    description: 'Un tronçon de route'
+    allOf:
+    - $ref: '#/definitions/Feature'
+    properties:
+      properties:
+        type: object
+        properties:
+          cleabs:
+            type: string
+          cl_admin:
+            type: string
+          nature:
+            type: string
+          pos_sol:
+            type: string
+          importance:
+            type: string
+          nb_voies:
+            type: string
+          sens:
+            type: string
+          largeur: 
+            type: number
+          gestion:
+            type: string
+          numero: 
+            type: string
+          distance:
+            type: number
+    geometry:
+      $ref: '#/definitions/Point'
+
+
+  FeatureCollectionTroncon:
+    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionTroncon` 
+    allOf:
+      - $ref: '#/definitions/FeatureCollection'
+    properties:
+      features:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureTroncon'
+
+  # import definitions
+  FeatureCollection:
+    $ref: './schema/geojson.yml#definitions/FeatureCollection'
+  Feature:
+    $ref: './schema/geojson.yml#definitions/Feature'
+  Geometry:
+    $ref: './schema/geojson.yml#definitions/Geometry'
+  Point:
+    $ref: './schema/geojson.yml#definitions/Point'

@@ -1,0 +1,306 @@
+swagger: '2.0'
+info:
+  title: Module Admin Express
+  description: >
+
+    Le service d'interrogation Admin Express permet d'obtenir des informations sur le découpage administratif français (régionds, déparetements, communes).
+    
+    Toutes les réponses sont au format GeoJSON et de type FeatureCollection.
+
+    Toutes les requêtes du module Admin Express peuvent se faire en POST ou en GET. 
+
+    Sur cette page, vous pouvez uniquement tester les modules avec des requêtes en GET.
+
+
+    **Exemple de géométrie : (référentiel EPSG:4326)**
+
+      * Point: 
+        
+        `{"type": "Point","coordinates":[-1.691634,48.104237]}`
+
+      * MultiPolygon: 
+        
+        `{"type":"MultiPolygon","coordinates":[[[[-0.288863182067871,48.963666607295977],[-0.299592018127441,48.959299208576141],[-0.296330451965332,48.955325952385039],[-0.282125473022461,48.950675995388366],[-0.279722213745117,48.967019382922331],[-0.288863182067871,48.963666607295977]]]]}`
+      
+      * Polygone trouée: 
+          
+        `{"type":"Polygon","coordinates":[[[1.2,48.85],[1.3,48.85],[1.3,48.9],[1.2,48.9],[1.2,48.85]],[[1.23,48.86],[1.23,48.88],[1.26,48.88],[1.26,48.86],[1.23,48.86]]]}`
+  
+      * Linéaire: 
+
+        `{"type":"LineString","coordinates":[[4.681549,47.793784],[4.741974,47.788248]]}`
+      
+  
+  contact:
+    name: API Carto Admin Express
+
+produces:
+  - application/json
+
+basePath: /api
+
+paths:
+  /admin-express/commune:
+    get:
+      summary: Récupération des communes
+      description: |
+        Retourne un résultat de Type "FeatureCollection" avec des communes correspondant aux paramètres.
+        Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
+      parameters:
+
+        - name: lon
+          in: query
+          description: 'Longitude (ex : 4.829214)'
+          type: number
+          required: false
+
+        - name: lat
+          in: query
+          description: 'Latitude (ex : 45.996981)'
+          type: number
+          required: false
+        
+        - name: geom
+          in: query
+          description: Géométrie au format GeoJson
+          schema:
+            $ref: '#/definitions/Geometry'
+
+        - name: _limit
+          in: query
+          description: Limite de résultats à afficher(chiffre entre 1 et 1000)
+          type: integer
+          required: false
+          
+        - name: _start
+          in: query
+          description: Position pour le début de la recherche
+          type: integer
+          required: false
+           
+      
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/FeatureCollectionCommune'
+
+  /admin-express/departement:
+      get:
+        summary: Récupération des départements
+        description: |
+          Retourne un résultat de Type "FeatureCollection" avec des départements correspondant aux paramètres.
+          Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
+        parameters:
+
+          - name: lon
+            in: query
+            description: 'Longitude (ex : 4.829214)'
+            type: number
+            required: false
+
+          - name: lat
+            in: query
+            description: 'Latitude (ex : 45.996981)'
+            type: number
+            required: false
+          
+          - name: geom
+            in: query
+            description: Géométrie au format GeoJson
+            schema:
+              $ref: '#/definitions/Geometry'
+
+          - name: _limit
+            in: query
+            description: Limite de résultats à afficher(chiffre entre 1 et 1000)
+            type: integer
+            required: false
+            
+          - name: _start
+            in: query
+            description: Position pour le début de la recherche
+            type: integer
+            required: false
+            
+        
+        responses:
+          '200':
+            description: Success
+            schema:
+              $ref: '#/definitions/FeatureCollectionDepartement'
+
+  /admine-xpress/region:
+      get:
+        summary: Récupération des régions
+        description: |
+          Retourne un résultat de Type "FeatureCollection" avec des régions correspondant aux paramètres.
+          Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
+        parameters:
+
+          - name: lon
+            in: query
+            description: 'Longitude (ex : 4.829214)'
+            type: number
+            required: false
+
+          - name: lat
+            in: query
+            description: 'Latitude (ex : 45.996981)'
+            type: number
+            required: false
+
+          - name: geom
+            in: query
+            description: Géométrie au format GeoJson
+            schema:
+              $ref: '#/definitions/Geometry'
+
+          - name: _limit
+            in: query
+            description: Limite de résultats à afficher(chiffre entre 1 et 1000)
+            type: integer
+            required: false
+            
+          - name: _start
+            in: query
+            description: Position pour le début de la recherche
+            type: integer
+            required: false
+            
+        
+        responses:
+          '200':
+            description: Success
+            schema:
+              $ref: '#/definitions/FeatureCollectionRegion'
+
+            
+
+definitions:
+
+  #---------------------------------------------------
+  # /admin-express/commune/
+  #---------------------------------------------------
+  
+  FeatureCommune:
+    description: 'Une commune'
+    allOf:
+    - $ref: '#/definitions/Feature'
+    properties:
+      properties:
+        type: object
+        properties:
+          id:
+            type: string
+          statut:
+            type: string
+          insee_com:
+            type: string
+          nom_com:
+            type: string
+          name_com_m:
+            type: string
+          insee_arr:
+            type: string
+          insee_dep:
+            type: string
+          nom_dep: 
+            type: string
+          insee_reg:
+            type: string
+          nom_reg: 
+            type: string
+          code_epci:
+            type: string
+          population:
+            type: string
+    geometry:
+      $ref: '#/definitions/MultiPolygon'
+
+
+  FeatureCollectionCommune:
+    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionCommune` 
+    allOf:
+      - $ref: '#/definitions/FeatureCollection'
+    properties:
+      features:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureCommune'
+
+  #---------------------------------------------------
+  # /admin-express/departement/
+  #---------------------------------------------------
+  
+  FeatureDepartement:
+    description: 'Un département'
+    allOf:
+    - $ref: '#/definitions/Feature'
+    properties:
+      properties:
+        type: object
+        properties:
+          id:
+            type: string
+          insee_dep:
+            type: string
+          nom_dep:
+            type: string
+          insee_reg:
+            type: string
+    geometry:
+      $ref: '#/definitions/MultiPolygon'
+
+
+  FeatureCollectionDepartement:
+    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionDepartement` 
+    allOf:
+      - $ref: '#/definitions/FeatureCollection'
+    properties:
+      features:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureDepartement'
+
+  #---------------------------------------------------
+  # /admin-express/region/
+  #---------------------------------------------------
+  
+  FeatureRegion:
+    description: 'Une région'
+    allOf:
+    - $ref: '#/definitions/Feature'
+    properties:
+      properties:
+        type: object
+        properties:
+          id:
+            type: string
+          nom_reg:
+            type: string
+          insee_reg:
+            type: string
+    geometry:
+      $ref: '#/definitions/MultiPolygon'
+
+
+  FeatureCollectionRegion:
+    description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionRegion` 
+    allOf:
+      - $ref: '#/definitions/FeatureCollection'
+    properties:
+      features:
+        type: array
+        items:
+          $ref: '#/definitions/FeatureRegion'
+
+  # import definitions
+  FeatureCollection:
+    $ref: './schema/geojson.yml#definitions/FeatureCollection'
+  Feature:
+    $ref: './schema/geojson.yml#definitions/Feature'
+  Geometry:
+    $ref: './schema/geojson.yml#definitions/Geometry'
+  MultiPolygon:
+    $ref: './schema/geojson.yml#definitions/MultiPolygon'

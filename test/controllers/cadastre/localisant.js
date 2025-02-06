@@ -53,8 +53,9 @@ describe('Testing /api/cadastre/localisant', function() {
             .get('/api/cadastre/localisant?code_insee=55001&section=ZK&numero=0141')
             .expect(res => {
                 const feature = res.body.features[0];
-                expect(feature.geometry.type).to.eql('Point');
+                expect(feature.geometry.type).to.eql('MultiPoint');
                 expect(feature.properties).to.eql({
+                    gid: 14644357,
                     numero: '0141',
                     feuille: 1,
                     section: 'ZK',

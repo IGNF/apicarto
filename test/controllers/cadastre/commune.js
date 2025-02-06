@@ -61,6 +61,7 @@ describe('Testing /api/cadastre/commune', function() {
                     const feature = res.body.features[0];
                     expect(feature.geometry.type).to.eql('MultiPolygon');
                     expect(feature.properties).to.eql({
+                        "gid": 28992,
                         "nom_com": "Andance",
                         "code_dep": "07",
                         "code_insee": "07009",

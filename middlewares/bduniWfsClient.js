@@ -1,13 +1,14 @@
-import GeoportalWfsClient from 'geoportal-wfs-client';
+import { ClientBduni as GeoportalWfsClientBduni } from '../lib/ClientBduni.js';
+
 
 /*
  * Middleware pour la création du client WFS geoportail
  * 
+ * TODO permettre la définition de la clé au niveau du serveur
  */
-var gppWfsClient = function(req, res, next) {
+var bduniWfsClient = function(req, res, next) {
     /* gestion des variables d'environnement et valeur par défaut */
     var options = {
-        'defaultGeomFieldName': 'geom',
         url: 'https://data.geopf.fr/wfs/ows',
         headers:{
             'User-Agent': 'apicarto',
@@ -15,16 +16,13 @@ var gppWfsClient = function(req, res, next) {
         }
     };
 
+    /* gestion du paramètre Referer */
     if ( req.headers.referer ){
         options.headers.Referer = req.headers.referer ;
     }
-    if ( process.env.GEOPORTAL_REFERER ){
-        options.headers.Referer = process.env.GEOPORTAL_REFERER ;
-    }
-
-    req.gppWfsClient = new GeoportalWfsClient(options);
+    req.bduniWfsClient = new GeoportalWfsClientBduni(options);
 
     next();
 };
 
-export default gppWfsClient;
+export default bduniWfsClient;
