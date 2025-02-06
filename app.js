@@ -7,6 +7,7 @@ import cors from 'cors';
 import { requestLogger } from './middlewares/request-logger.js';
 
 import { router as cadastre } from './controllers/cadastre/index.js';
+import { router as admin_express} from './controllers/admin-express/index.js';
 import { router as aoc } from './controllers/aoc/index.js';
 import { router as codes_postaux } from './controllers/codes-postaux/index.js';
 import { router as gpu } from './controllers/gpu/index.js';
@@ -14,6 +15,7 @@ import { router as rpg } from './controllers/rpg/index.js';
 import { router as nature } from './controllers/nature/index.js';
 import { router as wfs_geoportail } from './controllers/wfs-geoportail/index.js';
 import { router as er } from './controllers/er/index.js';
+import { router as bduni } from './controllers/bduni/index.js';
 import { router as corse } from './controllers/corse/index.js';
 import { router as health } from './controllers/health/index.js';
 
@@ -85,6 +87,9 @@ app.get('/api/', function (req, res) {
 /* Module cadastre */
 app.use('/api/cadastre', cadastre);
 
+/* Module Admin express */
+app.use('/api/admin-express', admin_express);
+
 /* Module AOC */
 app.use('/api/aoc',aoc);
 
@@ -105,6 +110,9 @@ app.use('/api/wfs-geoportail',wfs_geoportail);
 
 /* Module Espace Revendeur */
 app.use('/api/er',er);
+
+/* Module BDUni */
+app.use('/api/bduni',bduni);
 
 /* Module Dreal Corse */
 app.use('/api/corse/',corse);

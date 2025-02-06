@@ -345,7 +345,7 @@ paths:
   /cadastre/localisant:
     get:
       summary: Informations sur les parcelles non vectorisées.
-      description: Renvoie une featureCollection de type Point pour centrer le point sur une carte
+      description: Renvoie une featureCollection de type MultiPoint pour centrer le point sur une carte
       tags:
         - Localisant
       parameters:
@@ -553,7 +553,7 @@ definitions:
           code_arr:
             type: string
       geometry:
-        $ref: '#/definitions/Point'
+        $ref: '#/definitions/MultiPoint'
 
   FeatureCollectionLocalisant:
     description: Une `FeatureCollection` contenant uniquement des features de type `FeatureLocalisant`
@@ -619,5 +619,5 @@ definitions:
     $ref: './schema/geojson.yml#definitions/Geometry'
   MultiPolygon:
     $ref: './schema/geojson.yml#definitions/MultiPolygon'
-  Point:
-    $ref: './schema/geojson.yml#definitions/Point'
+  MultiPoint:
+    $ref: './schema/geojson.yml#definitions/MultiPoint'

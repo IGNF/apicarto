@@ -7,7 +7,7 @@ info:
     
     Toutes les réponses sont au format GeoJSON et de type FeatureCollection.
 
-    Toutes les requêtes du module "er" peuvent se faire en POST ou en GET. 
+    Toutes les requêtes du module "er" doivent se faire en GET. 
 
     Sur cette page, vous pouvez uniquement tester les modules avec des requêtes en GET.
       
@@ -77,7 +77,6 @@ paths:
         - name: publi_date_fin
           in: query
           description: Date de publication fin sous la forme AAAA-MM-JJ
-
           type: string
           require: false
 
