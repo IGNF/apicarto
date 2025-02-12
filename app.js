@@ -87,7 +87,7 @@ app.get('/api/', function (req, res) {
 /* Module cadastre */
 app.use('/api/cadastre', cadastre);
 
-/* Module Admin express */
+/* Module Limites Administratives */
 app.use('/api/limites-administratives', limites_administratives);
 
 /* Module AOC */
