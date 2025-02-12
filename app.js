@@ -7,7 +7,7 @@ import cors from 'cors';
 import { requestLogger } from './middlewares/request-logger.js';
 
 import { router as cadastre } from './controllers/cadastre/index.js';
-import { router as admin_express} from './controllers/admin-express/index.js';
+import { router as limites_administratives} from './controllers/limites-administratives/index.js';
 import { router as aoc } from './controllers/aoc/index.js';
 import { router as codes_postaux } from './controllers/codes-postaux/index.js';
 import { router as gpu } from './controllers/gpu/index.js';
@@ -88,7 +88,7 @@ app.get('/api/', function (req, res) {
 app.use('/api/cadastre', cadastre);
 
 /* Module Admin express */
-app.use('/api/admin-express', admin_express);
+app.use('/api/limites-administratives', limites_administratives);
 
 /* Module AOC */
 app.use('/api/aoc',aoc);

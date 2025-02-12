@@ -123,8 +123,8 @@ var getFeat = function(req, res, featureTypeName, params) {
             return featureCollection;
         })
         .then(function(featureCollection) {
+            featureCollection = format(featureTypeName, featureCollection);
             if(featureTypeName.match('commune')) {
-                featureCollection = stringifyPop(featureCollection);
                 getDepartmentAndRegionName(req, res, featureCollection);
             }
             else {
@@ -196,10 +196,52 @@ var getDepartmentAndRegionName = function(req, res, featureCollection) {
     }
 };
 
-var stringifyPop = function(featureCollection) {
-    for(let i in featureCollection.features) {
-        if(featureCollection.features[i].properties.population) {
-            featureCollection.features[i].properties.population = featureCollection.features[i].properties.population.toString();
+var format = function(featureTypeName, featureCollection) {
+    if(featureTypeName.match('commune')) {
+        for(let i in featureCollection.features) {
+            let feat = featureCollection.features[i];
+            if(feat.properties.population) {
+                feat.properties.population = feat.properties.population.toString();
+            }
+            if(feat.properties.nom) {
+                feat.properties.nom_com = feat.properties.nom;
+                delete feat.properties.nom;
+            }
+            if(feat.properties.nom_m) {
+                feat.properties.nom_com_m = feat.properties.nom_m;
+                delete feat.properties.nom_m;
+            }
+            if(feat.properties.siren_epci) {
+                feat.properties.code_epci = feat.properties.siren_epci;
+                delete feat.properties.siren_epci;
+            }
+            if(feat.properties.insee_can) {
+                delete feat.properties.insee_can;
+            }
+        }
+    } 
+    else if (featureTypeName.match('departement')) {
+        for(let i in featureCollection.features) {
+            let feat = featureCollection.features[i];
+            if(feat.properties.nom) {
+                feat.properties.nom_dep = feat.properties.nom;
+                delete feat.properties.nom;
+            }
+            if(feat.properties.nom_m) {
+                delete feat.properties.nom_m;
+            }
+        }
+    } 
+    else {
+        for(let i in featureCollection.features) {
+            let feat = featureCollection.features[i];
+            if(feat.properties.nom) {
+                feat.properties.nom_reg = feat.properties.nom;
+                delete feat.properties.nom;
+            }
+            if(feat.properties.nom_m) {
+                delete feat.properties.nom_m;
+            }
         }
     }
     return featureCollection;

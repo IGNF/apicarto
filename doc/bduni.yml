@@ -7,9 +7,7 @@ info:
     
     Toutes les réponses sont au format GeoJSON et de type FeatureCollection.
 
-    Toutes les requêtes du module BDUni doivent se faire en GET. 
-
-    Sur cette page, vous pouvez uniquement tester les modules avec des requêtes en GET.
+    Toutes les requêtes du module BDUni doivent se faire en GET.
 
 
     **Exemple de géométrie : (référentiel EPSG:4326)**

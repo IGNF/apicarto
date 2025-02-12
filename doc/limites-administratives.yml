@@ -1,13 +1,13 @@
 swagger: '2.0'
 info:
-  title: Module Admin Express
+  title: Module Limites Administratives
   description: >
 
-    Le service d'interrogation Admin Express permet d'obtenir des informations sur le découpage administratif français (régionds, déparetements, communes).
+    Le service d'interrogation Limites Administratives permet d'obtenir des informations sur le découpage administratif français (régions, déparetements, communes).
     
     Toutes les réponses sont au format GeoJSON et de type FeatureCollection.
 
-    Toutes les requêtes du module Admin Express peuvent se faire en POST ou en GET. 
+    Toutes les requêtes du module Limites Administratives peuvent se faire en POST ou en GET. 
 
     Sur cette page, vous pouvez uniquement tester les modules avec des requêtes en GET.
 
@@ -32,7 +32,7 @@ info:
       
   
   contact:
-    name: API Carto Admin Express
+    name: API Carto Limites Administratives
 
 produces:
   - application/json
@@ -40,7 +40,7 @@ produces:
 basePath: /api
 
 paths:
-  /admin-express/commune:
+  /limites-administratives/commune:
     get:
       summary: Récupération des communes
       description: |
@@ -85,7 +85,7 @@ paths:
           schema:
             $ref: '#/definitions/FeatureCollectionCommune'
 
-  /admin-express/departement:
+  /limites-administratives/departement:
       get:
         summary: Récupération des départements
         description: |
@@ -130,7 +130,7 @@ paths:
             schema:
               $ref: '#/definitions/FeatureCollectionDepartement'
 
-  /admine-xpress/region:
+  /limites-administratives/region:
       get:
         summary: Récupération des régions
         description: |
@@ -180,7 +180,7 @@ paths:
 definitions:
 
   #---------------------------------------------------
-  # /admin-express/commune/
+  # /limites-administratives/commune/
   #---------------------------------------------------
   
   FeatureCommune:
@@ -230,7 +230,7 @@ definitions:
           $ref: '#/definitions/FeatureCommune'
 
   #---------------------------------------------------
-  # /admin-express/departement/
+  # /limites-administratives/departement/
   #---------------------------------------------------
   
   FeatureDepartement:
@@ -264,7 +264,7 @@ definitions:
           $ref: '#/definitions/FeatureDepartement'
 
   #---------------------------------------------------
-  # /admin-express/region/
+  # /limites-administratives/region/
   #---------------------------------------------------
   
   FeatureRegion:
