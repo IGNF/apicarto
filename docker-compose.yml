@@ -1,5 +1,3 @@
-version: "3"
-
 services:
 
   api:
@@ -14,6 +12,8 @@ services:
       - apicarto
     environment:
       - PGPASSWORD=${POSTGRES_PASSWORD}
+      - HTTP_PROXY
+      - HTTPS_PROXY
     ports:
       # pour http://localhost:8091/api/doc si traefik non installé
       - "8091:8091"

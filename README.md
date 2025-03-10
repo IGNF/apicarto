@@ -31,7 +31,7 @@ La connexion à la base postgresql est configurée à l'aide des variables d'env
 | PGDATABASE | Nom de la base de données     |
 | PGUSER     | Nom de l'utilisateur          |
 | PGPASSWORD | Mot de passe de l'utilisateur |
-
+| PGPORT     | Host du serveur postgresql    |
 
 ## Sources de données
 
