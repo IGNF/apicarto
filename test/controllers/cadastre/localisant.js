@@ -55,7 +55,7 @@ describe('Testing /api/cadastre/localisant', function() {
                 const feature = res.body.features[0];
                 expect(feature.geometry.type).to.eql('MultiPoint');
                 expect(feature.properties).to.eql({
-                    gid: 14644357,
+                    gid: 14654203,
                     numero: '0141',
                     feuille: 1,
                     section: 'ZK',
