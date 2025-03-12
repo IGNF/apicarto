@@ -5,7 +5,7 @@ import {banConfig} from './base-adresse-nationale/config.js';
 
 
 var datasets = {
-    'Géoportail': geoportailConfig,
+    'Géoplateforme': geoportailConfig,
     'GPU': gpuConfig,
     'Base adresse nationale': banConfig
     //'Base des appellations viticoles' : aocConfig

@@ -7,7 +7,7 @@
 
 Pour faire fonctionner API Carto, vous avez besoin de:
 
-* [Node.js](https://nodejs.org) v14+ (utilisation de [nvm](https://github.com/creationix/nvm) recommandée)
+* [Node.js](https://nodejs.org) v20+
 
 ### Prérequis module aoc
 
@@ -37,7 +37,7 @@ La connexion à la base postgresql est configurée à l'aide des variables d'env
 
 | Source                | Version            | Modules           | Plus d'information |
 |-----------------------|--------------------|-------------------|--------------------|
-| Géoportail            | Flux WFS | Cadastre <br/> RPG <br/> Nature <br/> WFS-Geoportail | [Geoservices](https://geoservices.ign.fr/services-web-experts) |
+| Géoplateforme           | Flux WFS | Cadastre <br/> RPG <br/> Nature <br/> WFS-Geoportail | [Geoservices](https://geoservices.ign.fr/services-web-experts) |
 | GPU                   | Flux WFS | GPU                                   | [Géoportail de l'urbanisme](https://www.geoportail-urbanisme.gouv.fr/) |
 | Base adresse nationale | v4.1.1  | Codes Postaux                         | [BAN](https://github.com/baseadressenationale/codes-postaux) |
 <!-- | Base des appellations viticoles | Flux WFS | Appellations viticoles      | [FranceAgriMer](https://www.franceagrimer.fr/filieres-Vin-et-cidre/Vin/Professionnels/Teleprocedures) | -->
@@ -80,18 +80,8 @@ brew install postgresql postgis
 
 ### Création de la base de données
 
-La base qui contiendra les données locales doit être créée au prélable.
+Voir https://gitlab.gpf-tech.ign.fr/apicarto/apicarto-integration
 
-```bash
-createdb "apicarto"
-psql -d "apicarto" -c "CREATE EXTENSION postgis"
-```
-
-### Lancer le service
-
-```bash
-npm start
-```
 
 ## Développement derrière un proxy
 
