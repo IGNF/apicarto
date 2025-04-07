@@ -23,7 +23,8 @@ function createBduniProxy(featureTypeName){
             var params = matchedData(req);
             
             /*Valeur par défaut du paramètre distance*/
-            if ( typeof params.distance == 'undefined' ) { params.distance = 100;}
+            if ( typeof params.distance == 'undefined' ) {
+                params.distance = 100;}
            
             /* Value default pour _limit an _start */
             if ( typeof params._start == 'undefined' ) { params._start = 0;}
@@ -178,7 +179,8 @@ var moduleValidators = [
     check('_limit').optional().isNumeric().withMessage('Le champ "_limit" doit être un entier'),
     check('_start').optional().isNumeric().withMessage('Le champ "_start" doit être un entier'),
     check('lon').optional().isNumeric().withMessage('La longitude est invalide'),
-    check('lat').optional().isNumeric().withMessage('La latitude est invalide')
+    check('lat').optional().isNumeric().withMessage('La latitude est invalide'),
+    check('distance').optional().isFloat({min: 0}).withMessage('La distance doit être un nombre positif')
 ];
 
 /**

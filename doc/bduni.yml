@@ -1,7 +1,7 @@
 openapi: '3.1.0'
 
 info:
-  version: '2.8.6'
+  version: '2.8.7'
   title: Module BDUni
   description: >
 
@@ -108,11 +108,6 @@ components:
           description: Le type géométrique
           enum:
             - Point
-            - LineString
-            - Polygon
-            - MultiPoint
-            - MultiLineString
-            - MultiPolygon
         coordinates:
           type: array
           items: {}
