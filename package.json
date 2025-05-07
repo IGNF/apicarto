@@ -1,6 +1,6 @@
 {
   "name": "apicarto",
-  "version": "v2.8.7",
+  "version": "v2.9.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -39,6 +39,7 @@
     "handlebars": "^4.7.8",
     "http-proxy-agent": "^7.0.2",
     "https-proxy-agent": "^7.0.6",
+    "jsts": "^2.12.1",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2",
     "nomnom": "1.5.3",
