@@ -1,91 +1,157 @@
 import { Router } from 'express';
-import format from 'pg-format';
+import cors from 'cors';
 import { check, matchedData } from 'express-validator';
 import validateParams from '../../middlewares/validateParams.js';
 import isGeometry from '../../checker/isGeometry.js';
-import pgClient from '../../middlewares/pgClient.js';
+import aocWfsClient from '../../middlewares/aocWfsClient.js';
+import gppWfsClient from '../../middlewares/gppWfsClient.js';
+import GeoJSONParser from 'jsts/org/locationtech/jts/io/GeoJSONParser.js';
+import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp.js';
 import _ from 'lodash';
-import Handlebars from 'handlebars';
 
 var router = new Router();
 
-var reqAppellations = Handlebars.compile(`
-        SELECT
-            {{#if withGeometries}}ST_AsGeoJSON(appellations.geom) AS geom,{{/if}}
-            appellation,
-            idapp,
-            id_uni,
-            insee,
-            segment,
-            instruction_obligatoire,
-            granularite,
-            ST_Contains(input.geom, appellations.geom) AS contains
-        FROM
-            (SELECT ST_SetSRID(ST_GeomFromGeoJSON('%s'), 4326) geom) input,
-            appellations
-        WHERE appellations.insee IN (%L);
-`);
+/**
+ * Creation d'une chaîne de proxy sur le geoportail
+ * @param {String} featureTypeName le nom de la couche WFS
+ */
+function createAocProxy(featureTypeName) {
+    return [
+        gppWfsClient,
+        aocWfsClient,
+        validateParams,
+        function(req,res){
+            var params = matchedData(req);
+            //récupération des features
+            getFeat(req, res, featureTypeName, params);
+        }
+    ];
+};
 
-function buildSQLQuery(options) {
-    return format(reqAppellations(options), options.geometry, options.inseeCodeList);
-}
+var getFeat = function(req, res, featureTypeName, params) {
+
+    req.aocWfsClient.headers.apikey = params.apikey;
+    params = _.omit(params,'apikey');
+
+    req.gppWfsClient.getFeatures('ADMINEXPRESS-COG.LATEST:commune', params)
+        .then(function(featureCollectionCommune) {
+            let codeInsee = [];
+            let geomCom = [];
+            for(let i in featureCollectionCommune.features) {
+                codeInsee.push(featureCollectionCommune.features[i].properties.insee_com);
+                geomCom.push(featureCollectionCommune.features[i].geometry);
+            }
+            let geom = params.geom;
+            params = _.omit(params,'geom');
+            params.insee = codeInsee;
+            req.aocWfsClient.getFeatures(featureTypeName, params)
+                .then(function(featureCollection){
+                    for(let i in featureCollection.features) {
+
+                        featureCollection.features[i].properties.id_uni = featureCollection.features[i].properties.iduni;
+                        delete featureCollection.features[i].properties.iduni;
+
+                        featureCollection.features[i].properties.appellation = featureCollection.features[i].properties.appellatio;
+                        delete featureCollection.features[i].properties.appellatio;
+
+                        if(isFalseGeometry(featureCollection.features[i].geometry)) {
+                            featureCollection.features[i].geometry = null;
+                            delete featureCollection.features[i].bbox;
+                        }
+
+                        if(featureCollection.features[i].properties.segment == 1) {
+                            featureCollection.features[i].properties.granularite = 'exacte';
+                        } else {
+                            featureCollection.features[i].properties.granularite = 'commune';
+                        }
+
+                        if(featureCollection.features[i].properties.idapp == '1022') {
+                            featureCollection.features[i].properties.instruction_obligatoire = true;
+                        } else{
+                            featureCollection.features[i].properties.instruction_obligatoire = false;
+                        }
+
+                        if(featureCollection.features[i].properties.granularite == 'commune' 
+                        && featureCollection.features[i].properties.instruction_obligatoire == false) {
+                            for(let j in codeInsee) {
+                                if(featureCollection.features[i].properties.insee == codeInsee[j]) {
+                                    featureCollection.features[i].geometry = geomCom[j];
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(featureCollection.features[i].geometry)
+                        {
+                            featureCollection.features[i].properties.contains = isContained(geom, featureCollection.features[i].geometry);
+                        } else {
+                            featureCollection.features[i].properties.contains = null;
+                        }
+                    }
+                    res.json(featureCollection);
+                })
+                .catch(function(err) {
+                    res.status(500).json(err);
+                })
+            ;
+        });
+};
+
+var isFalseGeometry = function(geom) {
+    let isFalseGeom = false;
+    if(geom.coordinates 
+        && geom.coordinates[0] 
+        && geom.coordinates[0][0] 
+        && geom.coordinates[0][0][0]
+        && geom.coordinates[0][0][0][0] == 3 
+        && geom.coordinates[0][0][0][1] == 49) {
+        
+        isFalseGeom = true;
+    }
+    return isFalseGeom;
+};
+
+var isContained = function(geom1, geom2) {
+
+    let geoParser = new GeoJSONParser();
+
+    let jstsGeom1 = geoParser.read(geom1);
+    let jstsGeom2 = geoParser.read(geom2);
+
+    return RelateOp.contains(jstsGeom1, jstsGeom2);
+};
+
+var corsOptionsGlobal = function(origin,callback) {
+    var corsOptions;
+    if (origin) {
+        corsOptions = {
+            origin: origin,
+            optionsSuccessStatus: 200,
+            methods: 'GET,POST',
+            credentials: true
+        };
+    } else {
+        corsOptions = {
+            origin : '*',
+            optionsSuccessStatus : 200,
+            methods:  'GET,POST',
+            credentials: true
+        };
+    }
+    callback(null, corsOptions);
+};
 
 /**
- * Récupération des AOC viticoles par géométrie
+ * Permet d'alerter en cas de paramètre ayant changer de nom
+ * 
+ * TODO Principe à valider (faire un middleware de renommage des paramètres screateCadastreProxyi l'approche est trop violente)
  */
-router.post('/appellation-viticole', [
-    check('geom').exists().withMessage('Le paramètre geom est obligatoire'),
-    check('geom').custom(isGeometry)
-], validateParams, pgClient, function(req, res, next) {
-    var params = matchedData(req);
-    
-    var sqlCommunes = format(`
-        
-		SELECT
-        NOM_COM as nom,
-        CODE_INSEE as insee,
-        ST_Contains(input.geom, communes_ign.geom) AS contains,
-        ST_AsGeoJSON(communes_ign.geom) AS geom
-        FROM
-			communes_ign,
-            (SELECT ST_SetSRID(ST_GeomFromGeoJSON('%s'), 4326) geom) input
-        WHERE ST_Intersects(communes_ign.geom, input.geom);
-        `, params.geom);
-    
-    req.pgClient.query(sqlCommunes,function(err,result){  
-        if (err) return next(err);
-        req.intersectedCommunes = result.rows;   
-        req.pgClient.query(buildSQLQuery({
-            geometry: params.geom,
-            withGeometries: req.body.geojson !== false,
-            inseeCodeList: _.map(req.intersectedCommunes, 'insee')
-        }), function(err, result) {
-            if (err) {
-                return next(err);
-            }
-            if (!result.rows) {
-                return res.status(404).send({ status: 'No Data' });
-            }
-    
-            return res.send({
-                type: 'FeatureCollection',
-                features: result.rows.map(function (row) {
-                    const feature = {
-                        type: 'Feature',
-                        geometry: JSON.parse(row.geom),
-                        properties: _.omit(row, 'geom')
-                    };
-                    if (row.granularite === 'commune' && !row.instruction_obligatoire) {
-                        const commune = _.find(req.intersectedCommunes, { insee: row.insee });
-                        feature.properties.area = commune.intersect_area;
-                        feature.properties.contains = commune.contains;
-                        feature.geometry = JSON.parse(commune.geom);
-                    }
-                    return feature;
-                })
-            });
-        });
-    });
-});
+var moduleValidator = [
+    check('geom').exists().custom(isGeometry),
+    check('apikey').exists()
+];
+
+ 
+router.post('/appellation-viticole', cors(corsOptionsGlobal),moduleValidator, createAocProxy('appellation_inao_fam_gpkg_wfs:appellation_inao_fam'));
 
 export {router};

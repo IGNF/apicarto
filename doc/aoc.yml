@@ -41,6 +41,10 @@ info:
       * Linéaire :
 
         `{"type":"LineString","coordinates":[[4.681549,47.793784],[4.741974,47.788248]]}`
+
+    ## Historique des changements
+      * utilisation du flux WFS privé de FranceAgriMer
+      * ajout du paramètre *apikey*
    
 servers:
   - url: '/'
@@ -56,6 +60,12 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/Geometry'
+        - name: apikey
+          in: query
+          required: true
+          schema:
+            type: string
+
 
       tags:
         - Appellations viticoles

@@ -41,7 +41,6 @@ function createBduniProxy(featureTypeName){
                 .then(function(featureCollection) {
                     featureCollection = format(featureCollection, params.geom);
                     getDepartmentName(req, res, featureCollection);
-                    //res.json(format(featureCollection, params.geom));
                 })
                 .catch(function(err) {
                     res.status(500).json(err);
