@@ -1,6 +1,6 @@
 openapi: '3.1.0'
 info:
-  version: '2.8.7'
+  version: '2.9.0'
   title: API Carto - codes-postaux
   description: >
     API de récupération des communes associées à un code postal donné. Voir https://github.com/BaseAdresseNationale/codes-postaux pour plus d'information sur les sources de données.
