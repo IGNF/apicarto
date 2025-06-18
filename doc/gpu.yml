@@ -1,6 +1,6 @@
 openapi: '3.1.0'
 info:
-  version: '2.8.7'
+  version: '2.8.8'
   title: Module urbanisme (GpU)
   description: >
     Le service d’interrogation du GPU permet d’obtenir des informations d’urbanisme intersectant une géométrie (ponctuelle ou surfacique).

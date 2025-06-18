@@ -5,6 +5,7 @@ import { check, matchedData, oneOf } from 'express-validator';
 import validateParams from '../../middlewares/validateParams.js';
 import isGeometry from '../../checker/isGeometry.js';
 import bduniWfsClient from '../../middlewares/bduniWfsClient.js';
+import gppWfsClient from '../../middlewares/gppWfsClient.js';
 import _ from 'lodash';
 import NodeCache from 'node-cache';
 
@@ -18,6 +19,7 @@ var router = new Router();
 function createBduniProxy(featureTypeName){
     return [
         bduniWfsClient,
+        gppWfsClient,
         validateParams,
         function(req,res){
             var params = matchedData(req);
@@ -36,16 +38,42 @@ function createBduniProxy(featureTypeName){
             params = _.omit(params,'lon');
             params = _.omit(params,'lat');
 
-            /* requête WFS GPP*/
-            req.bduniWfsClient.getFeatures(featureTypeName, params)
-                .then(function(featureCollection) {
-                    featureCollection = format(featureCollection, params.geom);
-                    getDepartmentName(req, res, featureCollection);
-                    //res.json(format(featureCollection, params.geom));
-                })
-                .catch(function(err) {
-                    res.status(500).json(err);
-                });   
+            if(myCache.get('version_adminexpress')) {
+                /* requête WFS GPP*/
+                req.bduniWfsClient.getFeatures(featureTypeName, params)
+                    .then(function(featureCollection) {
+                        featureCollection = format(featureCollection, params.geom);
+                        getDepartmentName(req, res, featureCollection);
+                    })
+                    .catch(function(err) {
+                        res.status(500).json(err);
+                    });   
+            } else {
+                /* requête WFS GPP*/
+                req.gppWfsClient.getDescribeFeatureType(featureTypeName, params)
+                /* recherche version adminexpress */
+                    .then(function(featureCollection){
+                        myCache.set('version_adminexpress', 3);
+                        for(var i in featureCollection.featureTypes[0].properties) {
+                            if(featureCollection.featureTypes[0].properties[i].name == 'nom_officiel') {
+                                myCache.set('version_adminexpress', 4);
+                                break;
+                            }
+                        }
+                        //récupération des features
+                        req.bduniWfsClient.getFeatures(featureTypeName, params)
+                            .then(function(featureCollection) {
+                                featureCollection = format(featureCollection, params.geom);
+                                getDepartmentName(req, res, featureCollection);
+                            })
+                            .catch(function(err) {
+                                res.status(500).json(err);
+                            });   
+                    })
+                    .catch(function(err) {
+                        res.status(500).json(err);
+                    });
+            }
         }
     ];
 }
@@ -109,20 +137,37 @@ var getDepartmentName = function(req, res, featureCollection) {
         featureCollection = setDepName(featureCollection, myCache.get('departmentsList'));
         return res.json(featureCollection);
     } else {
-        req.bduniWfsClient.getFeatures('ADMINEXPRESS-COG-CARTO.LATEST:departement', {'_propertyNames':  ['insee_dep', 'nom']})
-            .then(function(featureCollectionDep) {
-                let list = [];
-                for(let i in featureCollectionDep.features) {
-                    let feat = featureCollectionDep.features[i];
-                    list.push({'nom' : feat.properties.nom, 'insee_dep' : feat.properties.insee_dep});
-                }
-                featureCollection = setDepName(featureCollection, list);
-                myCache.set('departmentsList', list);
-                return res.json(featureCollection);
-            })
-            .catch(function(err) {
-                res.status(500).json(err);
-            });
+        if(myCache.get('version_adminexpress') == 3) {
+            req.bduniWfsClient.getFeatures('ADMINEXPRESS-COG.LATEST:departement', {'_propertyNames':  ['insee_dep', 'nom']})
+                .then(function(featureCollectionDep) {
+                    let list = [];
+                    for(let i in featureCollectionDep.features) {
+                        let feat = featureCollectionDep.features[i];
+                        list.push({'nom' : feat.properties.nom, 'insee_dep' : feat.properties.insee_dep});
+                    }
+                    featureCollection = setDepName(featureCollection, list);
+                    myCache.set('departmentsList', list);
+                    return res.json(featureCollection);
+                })
+                .catch(function(err) {
+                    res.status(500).json(err);
+                });
+        } else {
+            req.bduniWfsClient.getFeatures('ADMINEXPRESS-COG.LATEST:departement', {'_propertyNames':  ['code_insee', 'nom_officiel']})
+                .then(function(featureCollectionDep) {
+                    let list = [];
+                    for(let i in featureCollectionDep.features) {
+                        let feat = featureCollectionDep.features[i];
+                        list.push({'nom' : feat.properties.nom_officiel, 'insee_dep' : feat.properties.code_insee});
+                    }
+                    featureCollection = setDepName(featureCollection, list);
+                    myCache.set('departmentsList', list);
+                    return res.json(featureCollection);
+                })
+                .catch(function(err) {
+                    res.status(500).json(err);
+                });
+        }
     }
 };
 
