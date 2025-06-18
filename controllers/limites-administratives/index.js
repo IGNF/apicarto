@@ -44,15 +44,17 @@ function createAdminExpressProxy(featureTypeName){
             else {
                 /* requête WFS GPP*/
                 req.gppWfsClient.getDescribeFeatureType(featureTypeName, params)
-                /* uniformisation des attributs en sortie */
+                /* recherche version adminexpress et nom de la géométrie */
                     .then(function(featureCollection){
                         var nom_geom = false;
+                        myCache.set('version_adminexpress', 3);
                         for(var i in featureCollection.featureTypes[0].properties) {
                             if(featureCollection.featureTypes[0].properties[i].name == 'geom'
                             || featureCollection.featureTypes[0].properties[i].name == 'the_geom')
                             {
                                 nom_geom = featureCollection.featureTypes[0].properties[i].name;
-                                break;
+                            } else if(featureCollection.featureTypes[0].properties[i].name == 'nom_officiel') {
+                                myCache.set('version_adminexpress', 4);
                             }
                         }
                         if(!nom_geom) {
@@ -142,10 +144,18 @@ var getDepartmentAndRegionName = function(req, res, featureCollection) {
     let setDepName = function(featureCollection, depList) {
         for(let i in featureCollection.features) {
             for(let j in depList) {
-                if(featureCollection.features[i].properties.insee_dep == depList[j].insee_dep) {
-                    featureCollection.features[i].properties.nom_dep = depList[j].nom;
-                    break;
+                if(featureCollection.features[i].properties.insee_dep) {
+                    if(featureCollection.features[i].properties.insee_dep == depList[j].insee_dep) {
+                        featureCollection.features[i].properties.nom_dep = depList[j].nom;
+                        break;
+                    }
+                } else {
+                    if(featureCollection.features[i].properties.code_insee_du_departement == depList[j].insee_dep) {
+                        featureCollection.features[i].properties.nom_dep = depList[j].nom;
+                        break;
+                    }
                 }
+                
             }
         }
         return featureCollection;
@@ -167,32 +177,62 @@ var getDepartmentAndRegionName = function(req, res, featureCollection) {
         featureCollection = setRegName(featureCollection, myCache.get('regionsList'));
         return res.json(featureCollection);
     } else {
-        req.gppWfsClient.getFeatures('ADMINEXPRESS-COG-CARTO.LATEST:departement', {'_propertyNames':  ['insee_dep', 'nom']})
-            .then(function(featureCollectionDep) {
-                let list = [];
-                for(let i in featureCollectionDep.features) {
-                    let feat = featureCollectionDep.features[i];
-                    list.push({'nom' : feat.properties.nom, 'insee_dep' : feat.properties.insee_dep});
-                }
-                featureCollection = setDepName(featureCollection, list);
-                myCache.set('departmentsList', list);
-            })
-            .then(function() {
-                req.gppWfsClient.getFeatures('ADMINEXPRESS-COG-CARTO.LATEST:region', {'_propertyNames':  ['insee_reg', 'nom']})
-                    .then(function(featureCollectionReg) {
-                        let list = [];
-                        for(let i in featureCollectionReg.features) {
-                            let feat = featureCollectionReg.features[i];
-                            list.push({'nom' : feat.properties.nom, 'insee_reg' : feat.properties.insee_reg});
-                        }
-                        featureCollection = setRegName(featureCollection, list);
-                        myCache.set('regionsList', list);
-                        return res.json(featureCollection);
-                    });
-            })
-            .catch(function(err) {
-                res.status(500).json(err);
-            });
+        if(myCache.get('version_adminexpress') == 3) {
+            req.gppWfsClient.getFeatures('ADMINEXPRESS-COG.LATEST:departement', {'_propertyNames':  ['insee_dep', 'nom']})
+                .then(function(featureCollectionDep) {
+                    let list = [];
+                    for(let i in featureCollectionDep.features) {
+                        let feat = featureCollectionDep.features[i];
+                        list.push({'nom' : feat.properties.nom, 'insee_dep' : feat.properties.insee_dep});
+                    }
+                    featureCollection = setDepName(featureCollection, list);
+                    myCache.set('departmentsList', list);
+                })
+                .then(function() {
+                    req.gppWfsClient.getFeatures('ADMINEXPRESS-COG.LATEST:region', {'_propertyNames':  ['insee_reg', 'nom']})
+                        .then(function(featureCollectionReg) {
+                            let list = [];
+                            for(let i in featureCollectionReg.features) {
+                                let feat = featureCollectionReg.features[i];
+                                list.push({'nom' : feat.properties.nom, 'insee_reg' : feat.properties.insee_reg});
+                            }
+                            featureCollection = setRegName(featureCollection, list);
+                            myCache.set('regionsList', list);
+                            return res.json(featureCollection);
+                        });
+                })
+                .catch(function(err) {
+                    res.status(500).json(err);
+                });
+
+        } else {
+            req.gppWfsClient.getFeatures('ADMINEXPRESS-COG.LATEST:departement', {'_propertyNames':  ['code_insee', 'nom_officiel']})
+                .then(function(featureCollectionDep) {
+                    let list = [];
+                    for(let i in featureCollectionDep.features) {
+                        let feat = featureCollectionDep.features[i];
+                        list.push({'nom' : feat.properties.nom_officiel, 'insee_dep' : feat.properties.code_insee});
+                    }
+                    featureCollection = setDepName(featureCollection, list);
+                    myCache.set('departmentsList', list);
+                })
+                .then(function() {
+                    req.gppWfsClient.getFeatures('ADMINEXPRESS-COG.LATEST:region', {'_propertyNames':  ['code_insee', 'nom_officiel']})
+                        .then(function(featureCollectionReg) {
+                            let list = [];
+                            for(let i in featureCollectionReg.features) {
+                                let feat = featureCollectionReg.features[i];
+                                list.push({'nom' : feat.properties.nom_officiel, 'insee_reg' : feat.properties.code_insee});
+                            }
+                            featureCollection = setRegName(featureCollection, list);
+                            myCache.set('regionsList', list);
+                            return res.json(featureCollection);
+                        });
+                })
+                .catch(function(err) {
+                    res.status(500).json(err);
+                });
+        }
     }
 };
 
@@ -200,48 +240,108 @@ var format = function(featureTypeName, featureCollection) {
     if(featureTypeName.match('commune')) {
         for(let i in featureCollection.features) {
             let feat = featureCollection.features[i];
+            if(feat.properties.cleabs) {
+                feat.properties.id = feat.properties.cleabs;
+                delete feat.properties.cleabs;
+            }
             if(feat.properties.population) {
                 feat.properties.population = feat.properties.population.toString();
             }
-            if(feat.properties.nom) {
-                feat.properties.nom_com = feat.properties.nom;
+            if(feat.properties.nom || feat.properties.nom_officiel) {
+                feat.properties.nom_com = feat.properties.nom?feat.properties.nom:feat.properties.nom_officiel;
                 delete feat.properties.nom;
+                delete feat.properties.nom_officiel;
             }
-            if(feat.properties.nom_m) {
-                feat.properties.nom_com_m = feat.properties.nom_m;
+            if(feat.properties.nom_m || feat.properties.nom_officiel_en_majuscules) {
+                feat.properties.nom_com_m = feat.properties.nom_m?feat.properties.nom_m:feat.properties.nom_officiel_en_majuscules;
                 delete feat.properties.nom_m;
+                delete feat.properties.nom_officiel_en_majuscules;
             }
-            if(feat.properties.siren_epci) {
-                feat.properties.code_epci = feat.properties.siren_epci;
+            if(feat.properties.siren_epci || feat.properties.codes_siren_des_epci) {
+                feat.properties.code_epci = feat.properties.siren_epci?feat.properties.siren_epci:feat.properties.codes_siren_des_epci;
                 delete feat.properties.siren_epci;
+                delete feat.properties.codes_siren_des_epci;
             }
-            if(feat.properties.insee_can) {
-                delete feat.properties.insee_can;
+
+            if(feat.properties.code_insee) {
+                feat.properties.insee_com = feat.properties.code_insee;
+                delete feat.properties.code_insee;
             }
+
+            if(feat.properties.code_insee_de_l_arrondissement) {
+                feat.properties.insee_arr = feat.properties.code_insee_de_l_arrondissement;
+                delete feat.properties.code_insee_de_l_arrondissement;
+            }
+
+            if(feat.properties.code_insee_du_departement) {
+                feat.properties.insee_dep = feat.properties.code_insee_du_departement;
+                delete feat.properties.code_insee_du_departement;
+            }
+
+            if(feat.properties.code_insee_de_la_region) {
+                feat.properties.insee_reg = feat.properties.code_insee_de_la_region;
+                delete feat.properties.code_insee_de_la_region;
+            }
+
+            delete feat.properties.insee_can;
+            delete feat.properties.code_insee_du_canton;
+            delete feat.properties.code_postal;
+            delete feat.properties.code_siren;
+            delete feat.properties.date_du_recensement;
+            delete feat.properties.organisme_recenseur;
+            delete feat.properties.fid;
+            delete feat.properties.superficie_cadastrale;
         }
     } 
     else if (featureTypeName.match('departement')) {
         for(let i in featureCollection.features) {
             let feat = featureCollection.features[i];
-            if(feat.properties.nom) {
-                feat.properties.nom_dep = feat.properties.nom;
+
+            if(feat.properties.cleabs) {
+                feat.properties.id = feat.properties.cleabs;
+                delete feat.properties.cleabs;
+            }
+            if(feat.properties.nom || feat.properties.nom_officiel) {
+                feat.properties.nom_dep = feat.properties.nom?feat.properties.nom:feat.properties.nom_officiel;
                 delete feat.properties.nom;
+                delete feat.properties.nom_officiel;
             }
-            if(feat.properties.nom_m) {
-                delete feat.properties.nom_m;
+            if(feat.properties.code_insee_de_la_region) {
+                feat.properties.insee_reg = feat.properties.code_insee_de_la_region;
+                delete feat.properties.code_insee_de_la_region;
             }
+            if(feat.properties.code_insee) {
+                feat.properties.insee_dep = feat.properties.code_insee;
+                delete feat.properties.code_insee;
+            }
+
+            delete feat.properties.nom_m;
+            delete feat.properties.nom_officiel_en_majuscules;
+            delete feat.properties.fid;
+            delete feat.properties.code_siren;
         }
     } 
     else {
         for(let i in featureCollection.features) {
             let feat = featureCollection.features[i];
-            if(feat.properties.nom) {
-                feat.properties.nom_reg = feat.properties.nom;
+            if(feat.properties.cleabs) {
+                feat.properties.id = feat.properties.cleabs;
+                delete feat.properties.cleabs;
+            }
+            if(feat.properties.nom || feat.properties.nom_officiel) {
+                feat.properties.nom_reg = feat.properties.nom?feat.properties.nom:feat.properties.nom_officiel;
                 delete feat.properties.nom;
+                delete feat.properties.nom_officiel;
             }
-            if(feat.properties.nom_m) {
-                delete feat.properties.nom_m;
+            if(feat.properties.code_insee) {
+                feat.properties.insee_reg = feat.properties.code_insee;
+                delete feat.properties.code_insee;
             }
+            
+            delete feat.properties.nom_m;
+            delete feat.properties.nom_officiel_en_majuscules;
+            delete feat.properties.fid;
+            delete feat.properties.code_siren;
         }
     }
     return featureCollection;
