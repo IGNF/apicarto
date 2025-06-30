@@ -28,10 +28,12 @@ describe('Testing /api/limites-administratives/departement', function() {
                     const feature = res.body.features[0];
                     expect(feature.geometry.type).to.eql('MultiPolygon');
                     expect(feature.properties).to.eql({
-                        "id": "DEPARTEM_FXX_00000000009",
+                        "id": "DEPARTEM0000000000000007",
                         "nom_dep": "Ardèche",
+                        "nom_dep_m": "ARDECHE",
                         "insee_dep": "07",
-                        "insee_reg": "84"
+                        "insee_reg": "84",
+                        "code_siren": "220700017"
                     });
                     expect(feature.bbox).to.eql(
                         [
@@ -55,10 +57,12 @@ describe('Testing /api/limites-administratives/departement', function() {
                 const feature = res.body.features[0];
                 expect(feature.geometry.type).to.eql('MultiPolygon');
                 expect(feature.properties).to.eql({
-                    "id": "DEPARTEM_FXX_00000000009",
+                    "id": "DEPARTEM0000000000000007",
                     "nom_dep": "Ardèche",
+                    "nom_dep_m": "ARDECHE",
                     "insee_dep": "07",
-                    "insee_reg": "84"
+                    "insee_reg": "84",
+                    "code_siren": "220700017"
                 });
                 expect(feature.bbox).to.eql(
                     [

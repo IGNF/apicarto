@@ -28,9 +28,11 @@ describe('Testing /api/limites-administratives/region', function() {
                     const feature = res.body.features[0];
                     expect(feature.geometry.type).to.eql('MultiPolygon');
                     expect(feature.properties).to.eql({
-                        "id": "REGION_FXX_0000000000011",
+                        "id": "REGION__0000000000000084",
                         "nom_reg": "Auvergne-Rhône-Alpes",
-                        "insee_reg": "84"
+                        "nom_reg_m": "AUVERGNE-RHONE-ALPES",
+                        "insee_reg": "84",
+                        "code_siren": "200053767"
                     });
                     expect(feature.bbox).to.eql(
                         [
@@ -54,9 +56,11 @@ describe('Testing /api/limites-administratives/region', function() {
                 const feature = res.body.features[0];
                 expect(feature.geometry.type).to.eql('MultiPolygon');
                 expect(feature.properties).to.eql({
-                    "id": "REGION_FXX_0000000000011",
+                    "id": "REGION__0000000000000084",
                     "nom_reg": "Auvergne-Rhône-Alpes",
-                    "insee_reg": "84"
+                    "nom_reg_m": "AUVERGNE-RHONE-ALPES",
+                    "insee_reg": "84",
+                    "code_siren": "200053767"
                 });
                 expect(feature.bbox).to.eql(
                     [

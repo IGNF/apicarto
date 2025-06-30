@@ -294,6 +294,18 @@ components:
               type: string
             population:
               type: string
+            code_insee_du_canton:
+              type: string
+            code_postal:
+              type: string
+            code_siren:
+              type: string
+            date_du_recensement:
+              type: string
+            organisme_recenseur:
+              type: string
+            superficie_cadastrale:
+              type: integer
       geometry:
         $ref: '#/components/schemas/MultiPolygon'
 
@@ -329,7 +341,11 @@ components:
               type: string
             nom_dep:
               type: string
+            nom_dep_m:
+              type: string
             insee_reg:
+              type: string
+            code_siren:
               type: string
       geometry:
         $ref: '#/components/schemas/MultiPolygon'
@@ -365,7 +381,11 @@ components:
               type: string
             nom_reg:
               type: string
+            nom_reg_m:
+              type: string
             insee_reg:
+              type: string
+            code_siren:
               type: string
       geometry:
         $ref: '#/components/schemas/MultiPolygon'
