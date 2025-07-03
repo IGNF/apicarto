@@ -39,7 +39,7 @@ var getFeat = function(req, res, featureTypeName, params) {
             let codeInsee = [];
             let geomCom = [];
             for(let i in featureCollectionCommune.features) {
-                codeInsee.push(featureCollectionCommune.features[i].properties.insee_com);
+                codeInsee.push(featureCollectionCommune.features[i].properties.code_insee);
                 geomCom.push(featureCollectionCommune.features[i].geometry);
             }
             let geom = params.geom;
