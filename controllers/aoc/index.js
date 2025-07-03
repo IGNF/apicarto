@@ -32,6 +32,7 @@ var getFeat = function(req, res, featureTypeName, params) {
 
     req.aocWfsClient.headers.apikey = params.apikey;
     params = _.omit(params,'apikey');
+    req.gppWfsClient.defaultGeomFieldName = 'geometrie';
 
     req.gppWfsClient.getFeatures('ADMINEXPRESS-COG.LATEST:commune', params)
         .then(function(featureCollectionCommune) {
@@ -94,6 +95,9 @@ var getFeat = function(req, res, featureTypeName, params) {
                     res.status(500).json(err);
                 })
             ;
+        })
+        .catch(function(err) {
+            res.status(500).json(err);
         });
 };
 
