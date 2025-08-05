@@ -168,6 +168,7 @@ var moduleValidator = [
 
  
 router.get('/search', cors(corsOptionsGlobal),moduleValidator, createWfsProxy());
+router.post('/search', cors(corsOptionsGlobal),moduleValidator, createWfsProxy());
 
 
 
