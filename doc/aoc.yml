@@ -1,7 +1,7 @@
 openapi: '3.1.0'
 
 info:
-  version: '2.9.0'
+  version: '2.9.1'
   title: API Carto Appellations viticoles
   description: >
     Le module appellations viticoles permet de récupérer les zones intersectant une géométrie GeoJSON.
