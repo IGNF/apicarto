@@ -53,6 +53,10 @@ info:
 
       RPG.2022:parcelles_graphiques
 
+      RPG.2023:parcelles_graphiques
+
+      RPG.2024:parcelles_graphiques
+
 
     **Exemple de géométrie** : (référentiel EPSG:4326)
 
@@ -139,7 +143,7 @@ paths:
       operationId: getV2
       description: |
         Prend une geometrie de type GeoJSON en paramètre d'entrée et renvoie les informations intersectant cette géométrie
-        Prend une date qui sera une valeur comprise entre 2015 et 2022 inclus.
+        Prend une date qui sera une valeur comprise entre 2015 et 2024 inclus.
         Les champs année et geom sont obligatoires.
         
       parameters:
