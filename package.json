@@ -8,7 +8,9 @@
     "test-unit": "c8 --reporter=html --reporter=text --reporter=cobertura mocha",
     "lint": "eslint -c .eslint.config.js controllers/**/*.js middlewares/*.js helper/**/*.js *.js test/**/*.js lib/**/*.js",
     "start": "node server | bunyan",
-    "coveralls": "c8 report --reporter=text-lcov | coveralls"
+    "test:coverage": "NODE_ENV=test c8 mocha",
+    "coverage": "NODE_ENV=test c8 --reporter=html --reporter=text mocha",
+    "coverage:report": "c8 report --reporter=html"
   },
   "contributors": [
     "Jérôme Desboeufs <jerome.desboeufs@data.gouv.fr>",
@@ -51,7 +53,6 @@
   },
   "devDependencies": {
     "c8": "^10.1.3",
-    "coveralls": "^3.1.1",
     "eslint": "^9.22.0",
     "expect.js": "^0.3.1",
     "globals": "^16.0.0",
