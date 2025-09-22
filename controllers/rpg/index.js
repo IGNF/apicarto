@@ -10,7 +10,7 @@ import NodeCache from 'node-cache';
 const myCache = new NodeCache();
 
 var router = new Router();
-const lastYearRPG = 2022;
+const lastYearRPG = 2024;
 const firstYearRPG = 2010;
 
 /**
