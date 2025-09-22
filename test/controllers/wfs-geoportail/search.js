@@ -3,11 +3,11 @@ import request from 'supertest';
 import { app } from '../../../app.js';
 import expect from 'expect.js';
 
-describe('/api/rpg/v2', function() {
+describe('/api/wfs-geoportail/search', function() {
     describe('without filtering parameter', function() {
         it('should reply with 400', function(done) {
             request(app)
-                .get('/api/rpg/v2')
+                .get('/api/wfs-geoportail/search')
                 .expect(400, done);
         });
     });
@@ -15,27 +15,18 @@ describe('/api/rpg/v2', function() {
     describe('with invalid geom', function() {
         it('should reply an error', function(done) {
             request(app)
-                .get('/api/rpg/v2?annee=2018&geom={"type":"Point","coordinates":[1.654399]}')
+                .get('/api/wfs-geoportail/search?source=CADASTRALPARCELS.PARCELLAIRE_EXPRESS:parcelle&geom={"type":"Point","coordinates":[1.654399]}')
                 .expect(400)
                 .end(done);
             ;
         });
     });
 
-    describe('with invalid year', function() {
-        it('should reply an error', function(done) {
-            request(app)
-                .get('/api/rpg/v2?annee=2013&geom={"type":"Point","coordinates":[1.654399,48.112235]}')
-                .expect(400)
-                .end(done);
-            ;
-        });
-    });
 
-    describe('with point at [1.654399,48.112235] (Rennes)', function() {
+    describe('with point at [1.654399,48.112235]', function() {
         it('should reply a list of FeatureCollection', function(done) {
             request(app)
-                .get('/api/rpg/v2?annee=2018&geom={"type":"Point","coordinates":[1.654399,48.112235]}')
+                .get('/api/wfs-geoportail/search?source=CADASTRALPARCELS.PARCELLAIRE_EXPRESS:parcelle&geom={"type":"Point","coordinates":[1.654399,48.112235]}')
                 .expect(200)
                 .expect(res => {
                     expect(res.body).to.be.an('object');

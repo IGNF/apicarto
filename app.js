@@ -17,7 +17,6 @@ import { router as wfs_geoportail } from './controllers/wfs-geoportail/index.js'
 import { router as er } from './controllers/er/index.js';
 import { router as bduni } from './controllers/bduni/index.js';
 import { router as corse } from './controllers/corse/index.js';
-import { router as health } from './controllers/health/index.js';
 
 import { datasets } from './datasets/index.js';
 
@@ -116,8 +115,5 @@ app.use('/api/bduni',bduni);
 
 /* Module Dreal Corse */
 app.use('/api/corse/',corse);
-
-/* Endpoints dédié à la surveillance */
-app.use('/api/health/',health);
 
 export {app};

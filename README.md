@@ -1,7 +1,6 @@
 # APICarto
 
 [![CI](https://github.com/IGNF/apicarto/actions/workflows/ci.yml/badge.svg)](https://github.com/IGNF/apicarto/actions/workflows/ci.yml)
-[![Coverage Status](https://coveralls.io/repos/github/IGNF/apicarto/badge.svg?branch=master)](https://coveralls.io/github/IGNF/apicarto?branch=master)
 
 ## Prérequis 
 
@@ -9,29 +8,13 @@ Pour faire fonctionner API Carto, vous avez besoin de:
 
 * [Node.js](https://nodejs.org) v20+
 
-### Prérequis module aoc
-
-Pour faire fonctionner le module aoc, vous avez besoin en plus de:
-
-* PostgreSQL v12+
-* PostGIS v2.2+
-* [ogr2ogr](http://www.gdal.org/ogr2ogr.html) v1.11+
-* wget (inclus dans la plupart des distributions Linux)
-
-
 ## Variables d'environnements
 
-### Configuration de la connexion postgresql pour le module aoc
+### apikey pour les tests du module aoc
 
-La connexion à la base postgresql est configurée à l'aide des variables d'environnement standard postgresql :
-
-| Variable   | Description                   |
-|------------|-------------------------------|
-| PGHOST     | Host du serveur postgresql    |
-| PGDATABASE | Nom de la base de données     |
-| PGUSER     | Nom de l'utilisateur          |
-| PGPASSWORD | Mot de passe de l'utilisateur |
-| PGPORT     | Host du serveur postgresql    |
+| Variable   | Description                                |
+|------------|--------------------------------------------|
+| APIKEY     | apikey du flux WFS privé de France Agrimer |
 
 ## Sources de données
 
@@ -57,31 +40,18 @@ npm install
 npm start
 ```
 
-## Installation  complémentaire pour le module aoc
+### Tests
 
-
-Sous Ubuntu :
-```bash
-# Installer ogr2ogr
-apt-get install gdal-bin
-
-# Installer PostgreSQL et PostGIS
-apt-get postgresql postgis postgresql-13-postgis-3
+```
+npm run test
 ```
 
-Sous Mac OS X :
-```bash
-# Installer ogr2ogr
-brew install gdal
+### Coverage
 
-# Installer PostgreSQL et PostGIS
-brew install postgresql postgis
 ```
-
-### Création de la base de données
-
-Voir https://gitlab.gpf-tech.ign.fr/apicarto/apicarto-integration
-
+npm run coverage
+```
+Consulter le rapport "index.htlm" créé dans le dossier "coverage"
 
 ## Développement derrière un proxy
 
