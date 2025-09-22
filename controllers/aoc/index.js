@@ -13,7 +13,6 @@ var router = new Router();
 
 /**
  * Creation d'une chaîne de proxy sur le geoportail
- * @param {String} featureTypeName le nom de la couche WFS
  */
 function createAocProxy() {
     return [
@@ -29,11 +28,19 @@ function createAocProxy() {
 };
 
 var getFeat = function(req, res, params) {
-    let featureTypeName = 'appellation_inao_fam_gpkg_wfs:appellation_inao_fam';
-
+    let featureTypeName;
     if(params.source == 'qlf') {
-        featureTypeName = 'appellation_inao_fam_gpkg_wfs:appellation_inao_fam_recette';
+        featureTypeName = 'appellation_inao_fam_gpkg_wfs_rec:appellation_inao_fam_rec';
+    } else if(params.source == 'prd') {
+        featureTypeName = 'appellation_inao_fam_gpkg_wfs:appellation_inao_fam';
+    } else {
+        return res.status(400).send({
+            code: 400,
+            message: 'La valeur de l\'attribut \'Source\' doit être \'qlf\' ou \'prd\''
+        });
     }
+
+    params = _.omit(params,'source');
 
     req.aocWfsClient.headers.apikey = params.apikey;
     params = _.omit(params,'apikey');
@@ -157,10 +164,11 @@ var corsOptionsGlobal = function(origin,callback) {
  */
 var moduleValidator = [
     check('geom').exists().custom(isGeometry),
+    check('source').exists(),
     check('apikey').exists()
 ];
 
  
-router.post('/appellation-viticole', cors(corsOptionsGlobal),moduleValidator, createAocProxy('appellation_inao_fam_gpkg_wfs:appellation_inao_fam'));
+router.post('/appellation-viticole', cors(corsOptionsGlobal),moduleValidator, createAocProxy());
 
 export {router};

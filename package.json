@@ -37,7 +37,7 @@
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
-    "geoportal-wfs-client": "https://github.com/IGNF/geoportal-wfs-client#v1.0.3",
+    "geoportal-wfs-client": "https://github.com/IGNF/geoportal-wfs-client#v1.0.4",
     "handlebars": "^4.7.8",
     "http-proxy-agent": "^7.0.2",
     "https-proxy-agent": "^7.0.6",
