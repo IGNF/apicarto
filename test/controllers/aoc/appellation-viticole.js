@@ -1,7 +1,8 @@
 /* eslint-env node, mocha */
 import request from 'supertest';
 import { app } from '../../../app.js';
-import expect from 'expect.js';
+/*Import utilisé uniquement dans les tests commentés*/
+//import expect from 'expect.js';
 
 describe('/api/aoc/appellation-viticole', function() {
     describe('without filtering parameter', function() {
