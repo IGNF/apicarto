@@ -1,6 +1,6 @@
 openapi: '3.1.0'
 info:
-  version : '2.9.2'
+  version : '2.9.3'
   title: Module Espace revendeur
   description: >
 
