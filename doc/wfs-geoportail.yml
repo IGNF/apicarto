@@ -99,8 +99,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - ref: "#/components/schemas/Feature"
-                  - ref: "#/components/schemas/FeatureCollection"
+                  - $ref: "#/components/schemas/Feature"
+                  - $ref: "#/components/schemas/FeatureCollection"
 
 components:            
   schemas:
