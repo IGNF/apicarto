@@ -95,6 +95,12 @@ paths:
       responses:
         '200':
           description: "Succès"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - ref: "#/components/schemas/Feature"
+                  - ref: "#/components/schemas/FeatureCollection"
 
 components:            
   schemas:
