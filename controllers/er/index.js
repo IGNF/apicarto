@@ -19,7 +19,6 @@ function createErProxy(featureTypeName,typeSearch){
         validateParams,
         function(req,res){
             var params = matchedData(req);
-            
             /** Gestion affichage des valeurs avec has_geometrie
              * si true : affichage uniquement des résultats avec géométrie
              * si false: affichage des résultats avec ou sans géométrie
@@ -30,6 +29,7 @@ function createErProxy(featureTypeName,typeSearch){
                     params.has_geometry=false;
                 } else {
                     params.has_geometry=true;
+                    params.is_manufactured = true;
                 }
             }
 
