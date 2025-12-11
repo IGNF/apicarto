@@ -75,7 +75,7 @@ paths:
           in: query
           required: true
           schema:
-            $ref: "#/components/schemas/Geometry"
+            $ref: "#/components/schemas/Geom"
 
         - name: _limit
           in: query
@@ -110,9 +110,26 @@ components:
         type: number
       minItems: 2
       maxItems: 4
+    Geom:
+      type: string
+      description: Une géométrie de type string
+      properties:
+        type:
+          type: string
+          description: Le type géométrique
+          enum:
+            - Point
+            - LineString
+            - Polygon
+            - MultiPoint
+            - MultiLineString
+            - MultiPolygon
+        coordinates:
+          type: array
+          items: {}
     Geometry:
       type: object
-      description: Une `Geometry` au sens GeoJSON
+      description: Une géométrie de type objet
       properties:
         type:
           type: string
