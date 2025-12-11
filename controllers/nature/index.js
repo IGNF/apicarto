@@ -78,7 +78,7 @@ let format = function(features, featureTypeName) {
     }
     return features;
 
-}
+};
 
 var corsOptionsGlobal = function(origin,callback) {
     var corsOptions;
