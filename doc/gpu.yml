@@ -618,14 +618,8 @@ paths:
 
 components:
   schemas:
-    Coordinate:
-      type: array
-      items:
-        type: number
-      minItems: 2
-      maxItems: 4
     Geometry:
-      type: string
+      type: object
       description: Une `Geometry` au sens GeoJSON
       properties:
         type:
@@ -660,26 +654,5 @@ components:
           type: string
           description: Le type d'objet GeoJSON (`FeatureCollection`)
         features:
-          type: array
-          items: {}
-    Point:
-      type: object
-      description: Un `Point` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type géométrique (`Point`)
-          enum:
-            - Point
-        coordinates:
-          $ref: '#/components/schemas/Coordinate'
-    MultiPolygon:
-      type: object
-      description: Un `MultiPolygon` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type géométrique (`MultiPolygon`)
-        coordinates:
           type: array
           items: {}
