@@ -68,7 +68,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
             
         - name: _limit
           in: query
@@ -111,7 +111,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
           
         - name: _limit
           in: query
@@ -157,7 +157,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
           
         - name: _limit
           in: query
@@ -203,7 +203,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
           
         - name: _limit
           in: query
@@ -250,7 +250,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
 
         - name: _limit
           in: query
@@ -293,7 +293,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
           
         - name: _limit
           in: query
@@ -335,7 +335,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
           
         - name: _limit
           in: query
@@ -377,7 +377,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
           
         - name: _limit
           in: query
@@ -420,7 +420,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            $ref: '#/components/schemas/Geom'
           
         - name: _limit
           in: query
@@ -452,9 +452,26 @@ components:
         type: number
       minItems: 2
       maxItems: 4
-    Geometry:
+    Geom:
       type: string
-      description: Une `Geometry` au sens GeoJSON
+      description: Une géométrie de type string
+      properties:
+        type: 
+          type: string
+          description: Le type géométrique
+          enum:
+            - Point
+            - LineString
+            - Polygon
+            - MultiPoint
+            - MultiLineString
+            - MultiPolygon
+        coordinates:
+          type: array
+          items: {}
+    Geometry:
+      type: object
+      description: Une géométrie de type object
       properties:
         type:
           type: string
@@ -468,7 +485,10 @@ components:
             - MultiPolygon
         coordinates:
           type: array
-          items: {}
+          items:
+            type: array
+            items: 
+              type: number
     Feature:
       type: object
       description: Une `Feature` au sens GeoJSON
@@ -489,7 +509,8 @@ components:
           description: Le type d'objet GeoJSON (`FeatureCollection`)
         features:
           type: array
-          items: {}
+          items:
+            $ref: '#/components/schemas/Feature'
     Point:
       type: object
       description: Un `Point` au sens GeoJSON
@@ -530,6 +551,42 @@ components:
               type: string
             url:
               type: string
+            id_local:
+              type: string
+            date_crea:
+              type: string
+            modif_adm:
+              type: string
+            modif_geo:
+              type: string
+            surf_off:
+              type: number
+            acte_deb:
+              type: string
+            acte_fin:
+              type: string
+            gest_site:
+              type: string
+            operateur:
+              type: string
+            precision:
+              type: string
+            src_geom:
+              type: string
+            src_annee:
+              type: string
+            marin:
+              type: string
+            p1_nature:
+              type: string
+            p4_geologi:
+              type: string
+            area_sig:
+              type: number
+            cd_sig:
+              type: string
+            territoire:
+              type: string
         geometry:
           $ref: '#/components/schemas/MultiPolygon'
   
@@ -563,6 +620,42 @@ components:
               type: string
             url:
               type: string
+            id_local:
+              type: string
+            date_crea:
+              type: string
+            modif_adm:
+              type: string
+            modif_geo:
+              type: string
+            surf_off:
+              type: number
+            acte_deb:
+              type: string
+            acte_fin:
+              type: string
+            gest_site:
+              type: string
+            operateur:
+              type: string
+            precision:
+              type: string
+            src_geom:
+              type: string
+            src_annee:
+              type: string
+            marin:
+              type: string
+            p1_nature:
+              type: string
+            p4_geologi:
+              type: string
+            area_sig:
+              type: number
+            cd_sig:
+              type: string
+            territoire:
+              type: string
         geometry:
           $ref: '#/components/schemas/MultiPolygon'              
   
@@ -589,11 +682,13 @@ components:
         properties:
           type: object
           properties:
-            id_local:
-              type: string
             id_mnhn:
               type: string
             nom_site:
+              type: string
+            url_fiche:
+              type: string
+            id_local:
               type: string
             date_crea:
               type: string
@@ -601,11 +696,11 @@ components:
               type: string
             modif_geo:
               type: string
-            url_fiche:
-              type: string
             surf_off:
-              type: string
+              type: number
             acte_deb:
+              type: string
+            acte_fin:
               type: string
             gest_site:
               type: string
@@ -621,27 +716,11 @@ components:
               type: string
             p1_nature:
               type: string
-            p2_culture:
-              type: string
-            p3_paysage:
-              type: string
             p4_geologi:
               type: string
-            p5_speleo:
-              type: string
-            p6_archeo:
-              type: string
-            p7_paleob:
-              type: string
-            p8_anthrop:
-              type: string
-            p9_science:
-              type: string
-            p10_public:
-              type: string
-            p11_dd:
-              type: string
-            p12_autre:
+            area_sig:
+              type: number
+            cd_sig:
               type: string
         geometry:
           $ref: '#/components/schemas/MultiPolygon'              
