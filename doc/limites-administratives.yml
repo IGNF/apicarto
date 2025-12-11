@@ -69,7 +69,7 @@ paths:
           description: Géométrie au format GeoJson
           required: false
           schema:
-            $ref: '#/components/schemas/Geometry'
+            type: string
 
         - name: _limit
           in: query
@@ -121,7 +121,7 @@ paths:
             description: Géométrie au format GeoJson
             required: false
             schema:
-              $ref: '#/components/schemas/Geometry'
+              type: string
 
           - name: _limit
             in: query
@@ -173,7 +173,7 @@ paths:
             description: Géométrie au format GeoJson
             required: false
             schema:
-              $ref: '#/components/schemas/Geometry'
+              type: string
 
           - name: _limit
             in: query
@@ -199,7 +199,6 @@ paths:
                   $ref: '#/components/schemas/FeatureCollectionRegion'
 
             
-
 components:
   schemas:
     Coordinate:
@@ -208,44 +207,6 @@ components:
           type: number
         minItems: 2
         maxItems: 4
-    Geometry:
-      type: string
-      description: Une `Geometry` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type géométrique
-          enum:
-            - Point
-            - LineString
-            - Polygon
-            - MultiPoint
-            - MultiLineString
-            - MultiPolygon
-        coordinates:
-          type: array
-          items: {}
-    Feature:
-      type: object
-      description: Une `Feature` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type d'objet GeoJSON (`Feature`)
-        id:
-          type: string
-        geometry:
-          $ref: '#/components/schemas/Geometry'
-    FeatureCollection:
-      type: object
-      description: Une `FeatureCollection` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type d'objet GeoJSON (`FeatureCollection`)
-        features:
-          type: array
-          items: {}
     MultiPolygon:
       type: object
       description: Un `MultiPolygon` au sens GeoJSON
@@ -255,7 +216,8 @@ components:
           description: Le type géométrique (`MultiPolygon`)
         coordinates:
           type: array
-          items: {}
+          items:
+            $ref: '#/components/schemas/Coordinate'
 
   #---------------------------------------------------
   # /limites-administratives/commune/
@@ -264,9 +226,11 @@ components:
     FeatureCommune:
       description: 'Une commune'
       type: object
-      allOf:
-        - $ref: '#/components/schemas/Feature'
       properties:
+        type:
+          type: string
+        id:
+          type: string
         properties:
           type: object
           properties:
@@ -306,8 +270,8 @@ components:
               type: string
             superficie_cadastrale:
               type: integer
-      geometry:
-        $ref: '#/components/schemas/MultiPolygon'
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'
 
     FeatureCollectionCommune:
       description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionCommune` 
@@ -329,9 +293,11 @@ components:
     FeatureDepartement:
       description: 'Un département'
       type: object
-      allOf:
-      - $ref: '#/components/schemas/Feature'
       properties:
+        type:
+          type: string
+        id:
+          type: string
         properties:
           type: object
           properties:
@@ -347,9 +313,8 @@ components:
               type: string
             code_siren:
               type: string
-      geometry:
-        $ref: '#/components/schemas/MultiPolygon'
-
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'
 
     FeatureCollectionDepartement:
       description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionDepartement` 
@@ -371,9 +336,11 @@ components:
     FeatureRegion:
       description: 'Une région'
       type: object
-      allOf:
-      - $ref: '#/components/schemas/Feature'
       properties:
+        type:
+          type: string
+        id:
+          type: string
         properties:
           type: object
           properties:
@@ -387,9 +354,8 @@ components:
               type: string
             code_siren:
               type: string
-      geometry:
-        $ref: '#/components/schemas/MultiPolygon'
-
+        geometry:
+          $ref: '#/components/schemas/MultiPolygon'
 
     FeatureCollectionRegion:
       description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionRegion` 

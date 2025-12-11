@@ -56,7 +56,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            type: string
       
         - name: date_maj_deb
           in: query
@@ -175,7 +175,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            type: string
           
         - name: _limit
           in: query
@@ -239,7 +239,7 @@ paths:
           in: query
           description: Géométrie au format GeoJson
           schema:
-            $ref: '#/components/schemas/Geometry'
+            type: string
           
         - name: _limit
           in: query
@@ -281,23 +281,6 @@ components:
         type: number
       minItems: 2
       maxItems: 4
-    Geometry:
-      type: string
-      description: Une `Geometry` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type géométrique
-          enum:
-            - Point
-            - LineString
-            - Polygon
-            - MultiPoint
-            - MultiLineString
-            - MultiPolygon
-        coordinates:
-          type: array
-          items: {}
     Feature:
       type: object
       description: Une `Feature` au sens GeoJSON
@@ -319,37 +302,33 @@ components:
         features:
           type: array
           items: {}
-    Point:
-      type: object
-      description: Un `Point` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type géométrique (`Point`)
-          enum:
-            - Point
-        coordinates:
-          $ref: '#/components/schemas/Coordinate'
     MultiPolygon:
       type: object
       description: Un `MultiPolygon` au sens GeoJSON
       properties:
         type:
           type: string
+          enum:
+            - MultiPolygon
           description: Le type géométrique (`MultiPolygon`)
         coordinates:
           type: array
-          items: {}
+          items:
+            $ref: '#/components/schemas/Coordinate'
           
     #---------------------------------------------------
     # /er/product/
     #---------------------------------------------------
     
     FeatureProduct:
+      type: object
       description: 'Products'
-      allOf:
-      - $ref: '#/components/schemas/Feature'
       properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`Feature`)
+        id:
+          type: string
         properties:
           type: object
           properties:
@@ -448,10 +427,14 @@ components:
     #---------------------------------------------------
               
     FeatureGrid:
+      type: object
       description: 'Grid'
-      allOf:
-        - $ref: '#/components/schemas/Feature'
       properties:
+        type: 
+          type: string
+          description: Le type d'objet GeoJSON (`Feature`)
+        id:
+          type: string
         properties:
           type: object
           properties:
@@ -475,10 +458,14 @@ components:
     #---------------------------------------------------
     
     FeatureCategory:
+      type: object
       description: 'Category'
-      allOf:
-      - $ref: '#/components/schemas/Feature'
       properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`Feature`)
+        id:
+          type:  string
         properties:
           type: object
           properties:
@@ -538,30 +525,36 @@ components:
           $ref: '#/components/schemas/MultiPolygon'
   
     FeatureCollectionCategory:
+      type: object
       description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionCategory'` 
-      allOf:
-      - $ref: '#/components/schemas/FeatureCollection'
       properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`FeatureCollection`)
         features:
           type: array
           items:
             $ref: '#/components/schemas/FeatureCategory'
   
     FeatureCollectionGrid:
+      type: object
       description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionGrid`
-      allOf:
-        - $ref: '#/components/schemas/FeatureCollection'
       properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`FeatureCollection`)
         features:
           type: array
           items:
             $ref: '#/components/schemas/FeatureGrid'
   
     FeatureCollectionProduct:
+      type: object
       description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionProduit` 
-      allOf:
-        - $ref: '#/components/schemas/FeatureCollection'
       properties:
+        type:
+          type: string
+          description: Le type d'objet GeoJSON (`FeatureCollection`)
         features:
           type: array
           items:

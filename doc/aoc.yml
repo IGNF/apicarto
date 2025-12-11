@@ -59,7 +59,7 @@ paths:
           in: query
           required: true
           schema:
-            $ref: '#/components/schemas/Geom'
+            type: string
         - name: apikey
           in: query
           required: true
@@ -98,23 +98,12 @@ paths:
 
 components:
   schemas:
-    Geom:
-      type: string
-      description: Une `Geometry` au sens GeoJSON au format `string`
-      properties:
-        type:
-          type: string
-          description: Le type géométrique
-          enum:
-            - Point
-            - LineString
-            - Polygon
-            - MultiPoint
-            - MultiLineString
-            - MultiPolygon
-        coordinates:
-          type: array
-          items: {}
+    Coordinate:
+      type: array
+      items:
+        type: number
+      minItems: 2
+      maxItems: 4
     Feature:
       type: object
       description: Une `Feature` au sens GeoJSON
@@ -125,7 +114,7 @@ components:
         id:
           type: string
         geometry:
-          $ref: '#/components/schemas/Geometry'
+          $ref: '#/components/schemas/Geom'
     MultiPolygon:
       type: object
       description: Un `MultiPolygon` au sens GeoJSON
@@ -139,8 +128,8 @@ components:
           type: array
           items:
             type: array
-            items:
-              type: number
+            items: 
+              $ref: '#/components/schemas/Coordinate'
     
     FeatureAppellationViticole:
       description: Objet géographique appellation viticole
