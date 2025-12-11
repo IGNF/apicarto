@@ -143,7 +143,10 @@ components:
             - MultiPolygon
         coordinates:
           type: array
-          items: {}
+          items:
+            type: array
+            items:
+              type: number
     Feature:
       type: object
       description: Une `Feature` au sens GeoJSON
