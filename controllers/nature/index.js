@@ -43,6 +43,9 @@ function createNaturaProxy(featureTypeName){
                             }
                         }
                     }
+                    if(featureCollection.features && featureCollection.features.length) {
+                        featureCollection.features = format(featureCollection.features, featureTypeName);
+                    }
                     return featureCollection;
                 })
                 .then(function(featureCollection) {
@@ -56,6 +59,26 @@ function createNaturaProxy(featureTypeName){
     ];
 }
 
+let format = function(features, featureTypeName) {
+    if( featureTypeName != 'patrinat_rncfs:rncfs') {
+        for(let i in features) {
+            features[i].properties.url = features[i].properties.url_fiche;
+            delete features[i].properties.url_fiche;
+
+            if(featureTypeName == 'patrinat_sic:sic' || featureTypeName == 'patrinat_zps:zps') {
+                features[i].properties.sitecode = features[i].properties.id_mnhn;
+                features[i].properties.sitename = features[i].properties.nom_site;
+                delete features[i].properties.id_mnhn;
+                delete features[i].properties.nom_site;
+            } else {
+                features[i].properties.nom = features[i].properties.nom_site;
+                delete features[i].properties.nom_site;
+            }
+        }
+    }
+    return features;
+
+};
 
 var corsOptionsGlobal = function(origin,callback) {
     var corsOptions;
@@ -100,16 +123,16 @@ var naturaValidators = natureValidators.concat([
     check('sitename').optional().isString()
 ]);
 
-router.get('/natura-habitat', cors(corsOptionsGlobal),naturaValidators, createNaturaProxy('PROTECTEDAREAS.SIC:sic'));
-router.post('/natura-habitat',cors(corsOptionsGlobal),naturaValidators, createNaturaProxy('PROTECTEDAREAS.SIC:sic'));
+router.get('/natura-habitat', cors(corsOptionsGlobal),naturaValidators, createNaturaProxy('patrinat_sic:sic'));
+router.post('/natura-habitat',cors(corsOptionsGlobal),naturaValidators, createNaturaProxy('patrinat_sic:sic'));
 
 /**
  * Récupération des couches natura 2000 suivant au titre de la directive Oiseaux
  * 
  */
 
-router.get('/natura-oiseaux', cors(corsOptionsGlobal),naturaValidators, createNaturaProxy('PROTECTEDAREAS.ZPS:zps'));
-router.post('/natura-oiseaux', cors(corsOptionsGlobal),naturaValidators, createNaturaProxy('PROTECTEDAREAS.ZPS:zps'));
+router.get('/natura-oiseaux', cors(corsOptionsGlobal),naturaValidators, createNaturaProxy('patrinat_zps:zps'));
+router.post('/natura-oiseaux', cors(corsOptionsGlobal),naturaValidators, createNaturaProxy('patrinat_zps:zps'));
 
 /**
 * Récupération des couches sur les réserves naturelle Corse
@@ -125,49 +148,49 @@ var reserveValidators = natureValidators.concat([
 *
 */
 
-router.get('/rnc', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.RNC:rnc'));
-router.post('/rnc', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.RNC:rnc'));
+router.get('/rnc', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_rnc:pnm'));
+router.post('/rnc', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_rnc:pnm'));
 
 /**
 * Récupération des couches reserves naturelles hors Corse
 *
 */
 
-router.get('/rnn', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.RNN:rnn'));
-router.post('/rnn', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.RNN:rnn'));
+router.get('/rnn', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_rnn:rnn'));
+router.post('/rnn', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_rnn:rnn'));
 
 /**
 * Récupération des couches Zones écologiques de nature remarquable
 *
 */
-router.get('/znieff1',cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.ZNIEFF1:znieff1'));
-router.post('/znieff1', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.ZNIEFF1:znieff1'));
+router.get('/znieff1',cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_znieff1:znieff1'));
+router.post('/znieff1', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_znieff1:znieff1'));
 
-router.get('/znieff2', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.ZNIEFF2:znieff2'));
-router.post('/znieff2', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.ZNIEFF2:znieff2'));
+router.get('/znieff2', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_znieff2:znieff2'));
+router.post('/znieff2', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_znieff2:znieff2'));
 
 /**
 * Récupération des couches Parcs naturels
 *
 */
 
-router.get('/pn', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.PN:pn'));
-router.post('/pn', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.PN:pn'));
+router.get('/pn', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_pn2:pn'));
+router.post('/pn', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_pn2:pn'));
 
 /**
 * Récupération des couches Parcs naturels régionaux
 *
 */
 
-router.get('/pnr', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.PNR:pnr'));
-router.post('/pnr', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.PNR:pnr'));
+router.get('/pnr', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_pnr:pnr'));
+router.post('/pnr', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_pnr:pnr'));
 
 /**
 * Récupération des couches réserves nationales de chasse et de faune sauvage
 *
 */
 
-router.get('/rncf', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.RNCF:rncfs'));
-router.post('/rncf', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('PROTECTEDAREAS.RNCF:rncfs'));
+router.get('/rncf', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_rncfs:rncfs'));
+router.post('/rncf', cors(corsOptionsGlobal),reserveValidators, createNaturaProxy('patrinat_rncfs:rncfs'));
 
 export {router};

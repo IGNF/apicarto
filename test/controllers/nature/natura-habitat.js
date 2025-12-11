@@ -19,7 +19,7 @@ describe('/api/nature/natura-habitat', function() {
     describe('with point at [1.654399,48.112235]', function() {
         it('should reply a list of FeatureCollection', function(done) {
             request(app)
-                .get('/api/nature/natura-habitat?geom={"type": "Point","coordinates":[4.80641007,47.80263764]}')
+                .get('/api/nature/natura-habitat?geom={"type": "Point","coordinates":[4.701549,47.790784]}')
                 .expect(200)
                 .expect(res => {
                     expect(res.body).to.be.an('object');
