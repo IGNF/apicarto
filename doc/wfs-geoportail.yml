@@ -145,7 +145,8 @@ components:
           additionalProperties: true
         bbox:
           type: array
-          items: {}
+          items:
+            type: number
     FeatureCollection:
       type: object
       description: Une `FeatureCollection` au sens GeoJSON
