@@ -104,6 +104,23 @@ components:
         type: number
       minItems: 2
       maxItems: 4
+    Geometry:
+      type: object
+      description: Une géométrie de type objet
+      properties:
+        type:
+          type: string
+          description: Le type géométrique
+          enum:
+            - Point
+            - LineString
+            - Polygon
+            - MultiPoint
+            - MultiLineString
+            - MultiPolygon
+        coordinates:
+          type: array
+          items: {}
     Feature:
       type: object
       description: Une `Feature` au sens GeoJSON
@@ -114,7 +131,7 @@ components:
         id:
           type: string
         geometry:
-          $ref: '#/components/schemas/Geom'
+          $ref: '#/components/schemas/Geometry'
     MultiPolygon:
       type: object
       description: Un `MultiPolygon` au sens GeoJSON

@@ -281,27 +281,6 @@ components:
         type: number
       minItems: 2
       maxItems: 4
-    Feature:
-      type: object
-      description: Une `Feature` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type d'objet GeoJSON (`Feature`)
-        id:
-          type: string
-        geometry:
-          $ref: '#/components/schemas/Geometry'
-    FeatureCollection:
-      type: object
-      description: Une `FeatureCollection` au sens GeoJSON
-      properties:
-        type:
-          type: string
-          description: Le type d'objet GeoJSON (`FeatureCollection`)
-        features:
-          type: array
-          items: {}
     MultiPolygon:
       type: object
       description: Un `MultiPolygon` au sens GeoJSON

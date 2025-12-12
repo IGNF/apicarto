@@ -121,6 +121,7 @@ components:
         coordinates:
           type: array
           items: {}
+    Feature:
       type: object
       description: Une `Feature` au sens GeoJSON
       properties:
