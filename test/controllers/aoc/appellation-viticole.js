@@ -26,7 +26,7 @@ describe('/api/aoc/appellation-viticole', function() {
     describe('with point at [1.654399,48.112235]', function() {
         it('should reply a list of FeatureCollection', function(done) {
             request(app)
-                .post('/api/aoc/appellation-viticole?apikey=' + process.env.APIKEY +'&source=prd&geom={"type":"Point","coordinates":[-1.691634,48.104237]}')
+                .post('/api/aoc/appellation-viticole?apikey=' + process.env.APIKEY +'&source=qlf&geom={"type":"Point","coordinates":[-1.691634,48.104237]}')
                 .expect(200)
                 .expect(res => {
                     expect(res.body).to.be.an('object');
