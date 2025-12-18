@@ -29,7 +29,7 @@ function createErProxy(featureTypeName,typeSearch){
                     params.has_geometry=false;
                 } else {
                     params.has_geometry=true;
-                    params.is_manufactured = true;
+                    //params.is_manufactured = true;
                 }
             }
 
