@@ -1,6 +1,6 @@
 {
   "name": "apicarto",
-  "version": "v2.10.0",
+  "version": "v2.10.1",
   "main": "index.js",
   "type": "module",
   "scripts": {
