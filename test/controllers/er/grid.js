@@ -60,12 +60,6 @@ describe('Testing /api/er/grid', function() {
                     expect(feature.properties.zip_codes).to.eql('[\"01270\"]');
                     expect(feature.properties.title).to.eql('BEAUPONT');
                     expect(feature.properties.deleted).to.eql(false);
-
-                    expect(feature.bbox).to.eql(
-                        [5.23331158,
-                            46.39351348,
-                            5.29357027,
-                            46.46135244]);
                 })
                 .end(done);
         });

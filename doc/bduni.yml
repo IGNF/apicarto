@@ -114,36 +114,31 @@ components:
     FeatureTroncon:
       description: 'Un tronçon de route'
       type: object
-      allOf:
-        - $ref: '#/components/schemas/Feature'
       properties:
-        properties:
-          type: object
-          properties:
-            cleabs:
-              type: string
-            cl_admin:
-              type: string
-            nature:
-              type: string
-            pos_sol:
-              type: string
-            importance:
-              type: string
-            nb_voies:
-              type: string
-            sens:
-              type: string
-            largeur: 
-              type: number
-            gestion:
-              type: string
-            numero: 
-              type: string
-            distance:
-              type: number
-      geometry:
-        $ref: '#/components/schemas/Point'
+        cleabs:
+          type: string
+        cl_admin:
+          type: string
+        nature:
+          type: string
+        pos_sol:
+          type: string
+        importance:
+          type: string
+        nb_voies:
+          type: string
+        sens:
+          type: string
+        largeur: 
+          type: number
+        gestion:
+          type: string
+        numero: 
+          type: string
+        distance:
+          type: number
+        geometry:
+          $ref: '#/components/schemas/Point'
 
     FeatureCollectionTroncon:
       description: Une `FeatureCollection` contenant uniquement des features de type `FeatureCollectionTroncon` 

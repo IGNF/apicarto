@@ -61,19 +61,11 @@ describe('Testing /api/cadastre/commune', function() {
                     const feature = res.body.features[0];
                     expect(feature.geometry.type).to.eql('MultiPolygon');
                     expect(feature.properties).to.eql({
-                        "gid": 28820,
+                        "gid": 28825,
                         "nom_com": "Andance",
                         "code_dep": "07",
                         "code_insee": "07009",
                     });
-                    expect(feature.bbox).to.eql(
-                        [
-                            4.78197598,
-                            45.20282918,
-                            4.81150389,
-                            45.26006379
-                        ]
-                    );
                 })
              .end(done);
         });

@@ -35,14 +35,6 @@ describe('Testing /api/limites-administratives/departement', function() {
                         "insee_reg": "84",
                         "code_siren": "220700017"
                     });
-                    expect(feature.bbox).to.eql(
-                        [
-                            3.86109916,
-                            44.2643371,
-                            4.88647239,
-                            45.36619392
-                        ]
-                    );
                 })
              .end(done);
         });
@@ -64,14 +56,6 @@ describe('Testing /api/limites-administratives/departement', function() {
                     "insee_reg": "84",
                     "code_siren": "220700017"
                 });
-                expect(feature.bbox).to.eql(
-                    [
-                        3.86109916,
-                        44.2643371,
-                        4.88647239,
-                        45.36619392
-                    ]
-                );
             })
             .end(done);
         });

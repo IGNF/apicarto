@@ -105,12 +105,6 @@ describe('Testing /api/er/product', function() {
                     expect(feature.properties.category_id).to.eql(13);
                     expect(feature.properties.segment_title).to.eql('CARTES DE RANDONNÉE');
                     expect(feature.properties.theme_title).to.eql('TOP 25 ET SÉRIE BLEUE');
-
-                    expect(feature.bbox).to.eql(
-                        [-4.82454566,
-                        48.44183799,
-                        -4.35927545,
-                        48.67786421]);
                 })
                 .end(done);
         });

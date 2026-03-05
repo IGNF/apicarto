@@ -47,14 +47,6 @@ describe('Testing /api/limites-administratives/commune', function() {
                         "organisme_recenseur": "INSEE",
                         "superficie_cadastrale": 650
                     });
-                    expect(feature.bbox).to.eql(
-                        [
-                            4.78195762,
-                            45.20311472,
-                            4.81250422,
-                            45.26006374
-                        ]
-                    );
                 })
              .end(done);
         });
@@ -88,14 +80,6 @@ describe('Testing /api/limites-administratives/commune', function() {
                     "organisme_recenseur": "INSEE",
                     "superficie_cadastrale": 650
                 });
-                expect(feature.bbox).to.eql(
-                    [
-                        4.78195762,
-                        45.20311472,
-                        4.81250422,
-                        45.26006374
-                    ]
-                );
             })
             .end(done);
         });

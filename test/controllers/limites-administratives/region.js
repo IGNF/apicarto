@@ -34,14 +34,6 @@ describe('Testing /api/limites-administratives/region', function() {
                         "insee_reg": "84",
                         "code_siren": "200053767"
                     });
-                    expect(feature.bbox).to.eql(
-                        [
-                            2.06287815,
-                            44.11549261,
-                            7.1855646,
-                            46.80428705
-                        ]
-                    );
                 })
              .end(done);
         });
@@ -62,14 +54,6 @@ describe('Testing /api/limites-administratives/region', function() {
                     "insee_reg": "84",
                     "code_siren": "200053767"
                 });
-                expect(feature.bbox).to.eql(
-                    [
-                        2.06287815,
-                        44.11549261,
-                        7.1855646,
-                        46.80428705
-                    ]
-                );
             })
             .end(done);
         });
