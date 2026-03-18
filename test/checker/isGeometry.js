@@ -1,5 +1,3 @@
-/*eslint-env node, mocha */
-
 import expect from 'expect.js';
 import isGeometry from '../../checker/isGeometry.js';
 

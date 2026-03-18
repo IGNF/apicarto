@@ -1,4 +1,3 @@
-/*eslint-env node, mocha */
 import expect from 'expect.js';
 import isCodeInsee from '../../checker/isCodeInsee.js';
 

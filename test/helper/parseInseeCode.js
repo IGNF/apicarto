@@ -1,4 +1,3 @@
-/*eslint-env node, mocha */
 import expect from 'expect.js';
 import parseInseeCode from '../../helper/parseInseeCode.js';
 
