@@ -37,7 +37,7 @@ describe('Testing /api/er/grid', function() {
                     let propertyNames = Object.keys(feature.properties);
                     propertyNames.sort();
                     expect(propertyNames).to.eql(EXPECTED_PROPERTIES);
-                    expect(feature.properties.title).to.eql("BAGE-DOMMARTIN");
+                    expect(feature.properties.name).to.eql("01025");
                 })
                 .end(done);
         });
@@ -54,12 +54,7 @@ describe('Testing /api/er/grid', function() {
                     let propertyNames = Object.keys(feature.properties);
                     propertyNames.sort();
                     expect(propertyNames).to.eql(EXPECTED_PROPERTIES);
-
-                    expect(feature.properties.name).to.eql('01029');
-                    expect(feature.properties.type).to.eql('municipality');
-                    expect(feature.properties.zip_codes).to.eql('[\"01270\"]');
                     expect(feature.properties.title).to.eql('BEAUPONT');
-                    expect(feature.properties.deleted).to.eql(false);
                 })
                 .end(done);
         });

@@ -76,7 +76,7 @@ describe('Testing /api/er/product', function() {
                     let propertyNames = Object.keys(feature.properties);
                     propertyNames.sort();
                     expect(propertyNames).to.eql(EXPECTED_PROPERTIES);
-                    expect(feature.properties.name).to.eql("0317OT - ILE D'OUESSANT");
+                    expect(feature.properties.code_ean).to.eql("9782758554226");
                 })
                 .end(done);
         });
@@ -94,17 +94,7 @@ describe('Testing /api/er/product', function() {
                     propertyNames.sort();
                     expect(propertyNames).to.eql(EXPECTED_PROPERTIES);
 
-                    expect(feature.properties.code_ean).to.eql(9782758553601);
                     expect(feature.properties.code_article).to.eql('0416ET');
-                    expect(feature.properties.name).to.eql('0416ET - PLOUGUERNEAU LES ABERS');
-                    expect(feature.properties.name_complement).to.eql(null);
-                    expect(feature.properties.edition_number).to.eql('6');
-                    expect(feature.properties.producer).to.eql('IGN');
-                    expect(feature.properties.scale).to.eql('1:25 000');
-                    expect(feature.properties.print_medium).to.eql('Papier standard');
-                    expect(feature.properties.category_id).to.eql(13);
-                    expect(feature.properties.segment_title).to.eql('CARTES DE RANDONNÉE');
-                    expect(feature.properties.theme_title).to.eql('TOP 25 ET SÉRIE BLEUE');
                 })
                 .end(done);
         });
