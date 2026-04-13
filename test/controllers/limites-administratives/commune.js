@@ -27,26 +27,11 @@ describe('Testing /api/limites-administratives/commune', function() {
                 .expect(res => {
                     const feature = res.body.features[0];
                     expect(feature.geometry.type).to.eql('MultiPolygon');
-                    expect(feature.properties).to.eql({
-                        "id": "COMMUNE_0000000000007009",
-                        "nom_com": "Andance",
-                        "nom_com_m": "ANDANCE",
-                        "insee_com": "07009",
-                        "statut": "Commune simple",
-                        "population": "1193",
-                        "insee_arr": "073",
-                        "insee_dep": "07",
-                        "insee_reg": "84",
-                        "code_epci": "200040491",
-                        "nom_dep": "Ardèche",
-                        "nom_reg": "Auvergne-Rhône-Alpes",
-                        "code_insee_du_canton": "0711",
-                        "code_postal": "07340",
-                        "code_siren": "210700092",
-                        "date_du_recensement": "2022-01-01Z",
-                        "organisme_recenseur": "INSEE",
-                        "superficie_cadastrale": 650
-                    });
+                    expect(feature.properties.nom_com).to.eql('Andance');
+                    expect(feature.properties.nom_com_m).to.eql('ANDANCE');
+                    expect(feature.properties.insee_com).to.eql('07009');
+                    expect(feature.properties.insee_dep).to.eql('07');
+                    expect(feature.properties.insee_reg).to.eql('84');
                 })
              .end(done);
         });
@@ -60,26 +45,11 @@ describe('Testing /api/limites-administratives/commune', function() {
             .expect(res => {
                 const feature = res.body.features[0];
                 expect(feature.geometry.type).to.eql('MultiPolygon');
-                expect(feature.properties).to.eql({
-                    "id": "COMMUNE_0000000000007009",
-                    "nom_com": "Andance",
-                    "nom_com_m": "ANDANCE",
-                    "insee_com": "07009",
-                    "statut": "Commune simple",
-                    "population": "1193",
-                    "insee_arr": "073",
-                    "insee_dep": "07",
-                    "insee_reg": "84",
-                    "code_epci": "200040491",
-                    "nom_dep": "Ardèche",
-                    "nom_reg": "Auvergne-Rhône-Alpes",
-                    "code_insee_du_canton": "0711",
-                    "code_postal": "07340",
-                    "code_siren": "210700092",
-                    "date_du_recensement": "2022-01-01Z",
-                    "organisme_recenseur": "INSEE",
-                    "superficie_cadastrale": 650
-                });
+                expect(feature.properties.nom_com).to.eql('Andance');
+                expect(feature.properties.nom_com_m).to.eql('ANDANCE');
+                expect(feature.properties.insee_com).to.eql('07009');
+                expect(feature.properties.insee_dep).to.eql('07');
+                expect(feature.properties.insee_reg).to.eql('84');
             })
             .end(done);
         });

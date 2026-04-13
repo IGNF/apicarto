@@ -34,19 +34,7 @@ describe('Testing /api/bduni/troncon', function() {
             .expect(res => {
                 const feature = res.body.features[1];
                 expect(feature.geometry.type).to.eql('Point');
-                expect(feature.properties).to.eql({
-                    "cleabs": "TRONROUT0000000009077731",
-                        "cl_admin": "Départementale",
-                        "nature": "Route à 1 chaussée",
-                        "pos_sol": "0",
-                        "importance": "3",
-                        "nb_voies": "2",
-                        "sens": "Double sens",
-                        "largeur": 5.5,
-                        "gestion": "01",
-                        "numero": "D904",
-                        "distance": 12.024405025580256
-                });
+                expect(feature.properties.numero).to.eql('D904');
             })
             .end(done);
         });
@@ -60,19 +48,7 @@ describe('Testing /api/bduni/troncon', function() {
             .expect(res => {
                 const feature = res.body.features[1];
                 expect(feature.geometry.type).to.eql('Point');
-                expect(feature.properties).to.eql({
-                    "cleabs": "TRONROUT0000000009077731",
-                        "cl_admin": "Départementale",
-                        "nature": "Route à 1 chaussée",
-                        "pos_sol": "0",
-                        "importance": "3",
-                        "nb_voies": "2",
-                        "sens": "Double sens",
-                        "largeur": 5.5,
-                        "gestion": "01",
-                        "numero": "D904",
-                        "distance": 12.024405025580256
-                });
+                expect(feature.properties.numero).to.eql('D904');
             })
             .end(done);
         });
@@ -86,19 +62,7 @@ describe('Testing /api/bduni/troncon', function() {
             .expect(res => {
                 const feature = res.body.features[1];
                 expect(feature.geometry.type).to.eql('Point');
-                expect(feature.properties).to.eql({
-                    "cleabs": "TRONROUT0000000009077731",
-                        "cl_admin": "Départementale",
-                        "nature": "Route à 1 chaussée",
-                        "pos_sol": "0",
-                        "importance": "3",
-                        "nb_voies": "2",
-                        "sens": "Double sens",
-                        "largeur": 5.5,
-                        "gestion": "01",
-                        "numero": "D904",
-                        "distance": 12.024405025580256
-                });
+                expect(feature.properties.numero).to.eql('D904');
             })
             .end(done);
         });

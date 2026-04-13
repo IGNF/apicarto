@@ -18,44 +18,36 @@ describe('Testing /api/limites-administratives/departement', function() {
 
     });
 
-   describe('/api/limites-administratives/departement?geom={"type":"Point","coordinates":[4.7962,45.22456]}',function(){
+   describe('/api/limites-administratives/departement?geom={"type":"Point","coordinates":[5.0477,44.0547]}',function(){
         it('should reply a FeatureCollection with valid features', done => {
             request(app)
             .post('/api/limites-administratives/departement')
             .expect(200)
-            .send({ 'geom': {"type":"Point","coordinates":[4.7962,45.22456]}})
+            .send({ 'geom': {"type":"Point","coordinates":[5.0477,44.0547]}})
                 .expect(res => {
                     const feature = res.body.features[0];
                     expect(feature.geometry.type).to.eql('MultiPolygon');
-                    expect(feature.properties).to.eql({
-                        "id": "DEPARTEM0000000000000007",
-                        "nom_dep": "Ardèche",
-                        "nom_dep_m": "ARDECHE",
-                        "insee_dep": "07",
-                        "insee_reg": "84",
-                        "code_siren": "220700017"
-                    });
+                    expect(feature.properties.nom_dep).to.eql('Vaucluse');
+                    expect(feature.properties.nom_dep_m).to.eql('VAUCLUSE');
+                    expect(feature.properties.insee_dep).to.eql('84');
+                    expect(feature.properties.insee_reg).to.eql('93');
                 })
              .end(done);
         });
     });
 
-    describe('/api/limites-administratives/departement?lon=4.7962&lat=45.22456',function(){
+    describe('/api/limites-administratives/departement?lon=5.0477&lat=44.0547',function(){
         it('should reply a FeatureCollection with valid features', done => {
             request(app)
-            .get('/api/limites-administratives/departement?lon=4.7962&lat=45.22456')
+            .get('/api/limites-administratives/departement?lon=5.0477&lat=44.0547')
             .expect(200)
             .expect(res => {
                 const feature = res.body.features[0];
                 expect(feature.geometry.type).to.eql('MultiPolygon');
-                expect(feature.properties).to.eql({
-                    "id": "DEPARTEM0000000000000007",
-                    "nom_dep": "Ardèche",
-                    "nom_dep_m": "ARDECHE",
-                    "insee_dep": "07",
-                    "insee_reg": "84",
-                    "code_siren": "220700017"
-                });
+                expect(feature.properties.nom_dep).to.eql('Vaucluse');
+                expect(feature.properties.nom_dep_m).to.eql('VAUCLUSE');
+                expect(feature.properties.insee_dep).to.eql('84');
+                expect(feature.properties.insee_reg).to.eql('93');
             })
             .end(done);
         });

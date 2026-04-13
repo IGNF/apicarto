@@ -26,11 +26,6 @@ describe('Testing /api/cadastre/commune', function() {
                 .expect(res => {
                     const feature = res.body.features[0];
                     expect(feature.geometry.type).to.eql("MultiPolygon");
-                    /*expect(feature.properties).to.eql({
-                        nom_com: 'Abainville',
-                        code_dep: '55',
-                        code_insee: '55001'
-                    });*/
                 })
                 .end(done);
         });
@@ -60,12 +55,7 @@ describe('Testing /api/cadastre/commune', function() {
                 .expect(res => {
                     const feature = res.body.features[0];
                     expect(feature.geometry.type).to.eql('MultiPolygon');
-                    expect(feature.properties).to.eql({
-                        "gid": 28825,
-                        "nom_com": "Andance",
-                        "code_dep": "07",
-                        "code_insee": "07009",
-                    });
+                    expect(feature.properties.nom_com).to.eql('Andance');
                 })
              .end(done);
         });

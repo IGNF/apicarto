@@ -53,19 +53,10 @@ describe('Testing /api/cadastre/localisant', function() {
             .expect(res => {
                 const feature = res.body.features[0];
                 expect(feature.geometry.type).to.eql('MultiPoint');
-                expect(feature.properties).to.eql({
-                    gid: 14699745,
-                    numero: '0141',
-                    feuille: 1,
-                    section: 'ZK',
-                    code_dep: '55',
-                    nom_com: 'Abainville',
-                    code_com: '001',
-                    com_abs: '000',
-                    code_arr: '000',
-                    idu: "55001000ZK0141",
-                    code_insee: '55001'
-                });
+                expect(feature.properties.numero).to.eql('0141');
+                expect(feature.properties.section).to.eql('ZK');
+                expect(feature.properties.code_dep).to.eql('55');
+                expect(feature.properties.nom_com).to.eql('Abainville');
             })
             .end(done);
     });

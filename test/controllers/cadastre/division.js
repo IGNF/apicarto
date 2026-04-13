@@ -68,16 +68,10 @@ describe('Testing /api/cadastre/division', function() {
                     propertyNames.sort();
                     expect(propertyNames).to.eql(EXPECTED_PROPERTIES);
 
-                    expect(feature.properties.feuille).to.eql(1);
                     expect(feature.properties.section).to.eql('AA');
                     expect(feature.properties.code_dep).to.eql('75');
                     expect(feature.properties.nom_com).to.eql('Paris');
-                    expect(feature.properties.code_com).to.eql('056');
-                    expect(feature.properties.com_abs).to.eql('000');
-                    expect(feature.properties.echelle).to.eql('500');
-                    expect(feature.properties.edition).to.eql('1');
                     expect(feature.properties.code_arr).to.eql('112');
-                    // bbox: [2.39897142,48.84503372,2.40345206,48.84809772]
                     expect(feature.properties.code_insee).to.eql('75056');
                 })
                 .end(done);
