@@ -40,6 +40,7 @@ paths:
           required: false
           schema:
             type: number
+            format: number
           
 
         - name: lat
@@ -48,6 +49,7 @@ paths:
           required: false
           schema:
             type: number
+            format: number
           
 
         - name: distance
@@ -58,6 +60,7 @@ paths:
           placeholder: 100
           schema:
             type: number
+            format: number
           
         
         - name: geom
@@ -137,6 +140,7 @@ components:
           type: string
         distance:
           type: number
+          format: double
         geometry:
           $ref: '#/components/schemas/Point'
 

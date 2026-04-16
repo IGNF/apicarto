@@ -54,6 +54,7 @@ paths:
           required: false
           schema:
             type: number
+            format: double
           
 
         - name: lat
@@ -62,6 +63,7 @@ paths:
           required: false
           schema:
             type: number
+            format: double
           
         
         - name: geom
@@ -108,6 +110,7 @@ paths:
             required: false
             schema:
               type: number
+              format: double
             
           - name: lat
             in: query
@@ -115,6 +118,7 @@ paths:
             required: false
             schema:
               type: number
+              format: double
           
           - name: geom
             in: query
@@ -160,6 +164,7 @@ paths:
             required: false
             schema:
               type: number
+              format: double
 
           - name: lat
             in: query
@@ -167,6 +172,7 @@ paths:
             required: false
             schema:
               type: number
+              format: double
 
           - name: geom
             in: query
