@@ -48,7 +48,7 @@
     "pg-format": "^1.0.4",
     "shelljs": "^0.10.0",
     "swagger-ui-dist": "^5.32.1",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "c8": "^11.0.0",
