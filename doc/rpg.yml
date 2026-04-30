@@ -1,7 +1,7 @@
 openapi: 3.1.0
 
 info:
-  version: '2.10.1'
+  version: '2.10.2'
   title: Module RPG
   description: >
 
