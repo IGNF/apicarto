@@ -19,7 +19,7 @@ function createGpuProxy(typeName){
         gpuWfsClient,
         function(req,res){
             var params = matchedData(req);
-            params._limit = 5000;
+            params._limit = 1000;
 
             //Si couche du type generateur ou assiette le champ categorie corresponds à suptype
             if (params.categorie) {
