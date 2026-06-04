@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import cors from 'cors';
-import { check, matchedData } from 'express-validator';
+import { check, matchedData, oneOf } from 'express-validator';
 import validateParams from '../../middlewares/validateParams.js';
 import isGeometry from '../../checker/isGeometry.js';
 import isCodeInsee from '../../checker/isCodeInsee.js';
@@ -88,52 +88,66 @@ var corsOptionsGlobal = function(origin,callback) {
     callback(null, corsOptions);
 };
 /* Définition des tests paramètres */
-var legacyValidators = [
-    check('geom').optional().custom(isGeometry)
+var geomOrPartitionValidators = [
+    oneOf(
+        [
+            check('geom').exists(),
+            check('partition').exists(),
+        ], {message: 'Il faut renseigner soit le champ "geom", soit le champ "partition".'}
+    ),
+    check('geom').optional().custom(isGeometry),
+    check('partition').optional().isString()
 ];
 
-var communeValidators = legacyValidators.concat([
+var geomOrInseeValidators = [
+    oneOf(
+        [
+            check('geom').exists(),
+            check('insee').exists(),
+        ], {message: 'Il faut renseigner soit le champ "geom", soit le champ "insee".'}
+    ),
+    check('geom').optional().custom(isGeometry),
     check('insee').optional().custom(isCodeInsee)
-]);
+];
 
-var partitionValidators = legacyValidators.concat([
+var partitionValidators = [
     check('partition').optional().isString()
-]);
+];
 
-var categoriesValidators = partitionValidators.concat([
+var categoriesValidators = geomOrPartitionValidators.concat([
     check('categorie').optional().isString()
 ]);
 
-router.get('/municipality', cors(corsOptionsGlobal),communeValidators, createGpuProxy(mapping['municipality']));
-router.post('/municipality',cors(corsOptionsGlobal), communeValidators, createGpuProxy(mapping['municipality']));
+router.get('/municipality', cors(corsOptionsGlobal),geomOrInseeValidators, createGpuProxy(mapping['municipality']));
+router.post('/municipality',cors(corsOptionsGlobal), geomOrInseeValidators, createGpuProxy(mapping['municipality']));
 
 
-router.get('/document',cors(corsOptionsGlobal),partitionValidators,createGpuProxy(mapping['document']));
-router.post('/document',cors(corsOptionsGlobal),partitionValidators,createGpuProxy(mapping['document']));
+router.get('/document',cors(corsOptionsGlobal),geomOrPartitionValidators,createGpuProxy(mapping['document']));
+router.post('/document',cors(corsOptionsGlobal),geomOrPartitionValidators,createGpuProxy(mapping['document']));
 
-router.get('/zone-urba', cors(corsOptionsGlobal),partitionValidators, createGpuProxy(mapping['zone-urba']));
-router.post('/zone-urba', cors(corsOptionsGlobal),partitionValidators, createGpuProxy(mapping['zone-urba']));
+router.get('/zone-urba', cors(corsOptionsGlobal),geomOrPartitionValidators, createGpuProxy(mapping['zone-urba']));
+router.post('/zone-urba', cors(corsOptionsGlobal),geomOrPartitionValidators, createGpuProxy(mapping['zone-urba']));
 
-router.get('/secteur-cc', cors(corsOptionsGlobal),partitionValidators, createGpuProxy(mapping['secteur-cc']));
-router.post('/secteur-cc', cors(corsOptionsGlobal),partitionValidators, createGpuProxy(mapping['secteur-cc']));
+router.get('/secteur-cc', cors(corsOptionsGlobal),geomOrPartitionValidators, createGpuProxy(mapping['secteur-cc']));
+router.post('/secteur-cc', cors(corsOptionsGlobal),geomOrPartitionValidators, createGpuProxy(mapping['secteur-cc']));
 
-router.get('/prescription-pct', cors(corsOptionsGlobal),partitionValidators, createGpuProxy(mapping['prescription-pct']));
-router.post('/prescription-pct', cors(corsOptionsGlobal),partitionValidators, createGpuProxy(mapping['prescription-pct']));
+router.get('/prescription-pct', cors(corsOptionsGlobal),geomOrPartitionValidators, createGpuProxy(mapping['prescription-pct']));
+router.post('/prescription-pct', cors(corsOptionsGlobal),geomOrPartitionValidators, createGpuProxy(mapping['prescription-pct']));
 
-router.get('/prescription-lin', cors(corsOptionsGlobal),partitionValidators,createGpuProxy(mapping['prescription-lin']));
-router.post('/prescription-lin', cors(corsOptionsGlobal),partitionValidators,createGpuProxy(mapping['prescription-lin']));
+router.get('/prescription-lin', cors(corsOptionsGlobal),geomOrPartitionValidators,createGpuProxy(mapping['prescription-lin']));
+router.post('/prescription-lin', cors(corsOptionsGlobal),geomOrPartitionValidators,createGpuProxy(mapping['prescription-lin']));
 
-router.get('/prescription-surf', cors(corsOptionsGlobal),partitionValidators ,createGpuProxy(mapping['prescription-surf']));
-router.post('/prescription-surf', cors(corsOptionsGlobal),partitionValidators ,createGpuProxy(mapping['prescription-surf']));
+router.get('/prescription-surf', cors(corsOptionsGlobal),geomOrPartitionValidators ,createGpuProxy(mapping['prescription-surf']));
+router.post('/prescription-surf', cors(corsOptionsGlobal),geomOrPartitionValidators ,createGpuProxy(mapping['prescription-surf']));
 
-router.get('/info-pct', cors(corsOptionsGlobal), partitionValidators,createGpuProxy(mapping['info-pct']));
-router.post('/info-pct', cors(corsOptionsGlobal), partitionValidators,createGpuProxy(mapping['info-pct']));
+router.get('/info-pct', cors(corsOptionsGlobal), geomOrPartitionValidators,createGpuProxy(mapping['info-pct']));
+router.post('/info-pct', cors(corsOptionsGlobal), geomOrPartitionValidators,createGpuProxy(mapping['info-pct']));
 
-router.get('/info-lin', cors(corsOptionsGlobal),partitionValidators, createGpuProxy(mapping['info-lin']));
-router.post('/info-lin', cors(corsOptionsGlobal),partitionValidators, createGpuProxy(mapping['info-lin']));
+router.get('/info-lin', cors(corsOptionsGlobal),geomOrPartitionValidators, createGpuProxy(mapping['info-lin']));
+router.post('/info-lin', cors(corsOptionsGlobal),geomOrPartitionValidators, createGpuProxy(mapping['info-lin']));
 
-router.get('/info-surf', cors(corsOptionsGlobal), partitionValidators, createGpuProxy(mapping['info-surf']));
-router.post('/info-surf', cors(corsOptionsGlobal), partitionValidators, createGpuProxy(mapping['info-surf']));
+router.get('/info-surf', cors(corsOptionsGlobal), geomOrPartitionValidators, createGpuProxy(mapping['info-surf']));
+router.post('/info-surf', cors(corsOptionsGlobal), geomOrPartitionValidators, createGpuProxy(mapping['info-surf']));
 
 /*--------------------------------------------------------------------------------------------
  * SUP

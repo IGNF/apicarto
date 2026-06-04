@@ -46,6 +46,8 @@ paths:
       description: |
         Retourne un résultat de Type "FeatureCollection" avec des communes correspondant aux paramètres.
         Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
+      tags: 
+        - Limites administratives
       parameters:
 
         - name: lon
@@ -102,6 +104,8 @@ paths:
         description: |
           Retourne un résultat de Type "FeatureCollection" avec des départements correspondant aux paramètres.
           Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
+        tags: 
+          - Limites administratives
         parameters:
 
           - name: lon
@@ -156,6 +160,8 @@ paths:
         description: |
           Retourne un résultat de Type "FeatureCollection" avec des régions correspondant aux paramètres.
           Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
+        tags: 
+          - Limites administratives
         parameters:
 
           - name: lon

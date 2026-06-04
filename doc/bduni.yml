@@ -32,6 +32,8 @@ paths:
       description: |
         Renvoie une liste de résultats contenant les données d'un troncon de route bduni à partir d'une coordonnée en longitude/latitude.
         Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
+      tags: 
+        - BDUni
       parameters:
 
         - name: lon
@@ -40,7 +42,7 @@ paths:
           required: false
           schema:
             type: number
-            format: number
+            format: double
           
 
         - name: lat
@@ -49,18 +51,18 @@ paths:
           required: false
           schema:
             type: number
-            format: number
+            format: double
           
 
         - name: distance
           in: query
           description: 'Distance de recherche en mètres'
           required: false
-          default : 100
           placeholder: 100
           schema:
             type: number
-            format: number
+            format: double
+            default: 100.0
           
         
         - name: geom
