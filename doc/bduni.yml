@@ -1,7 +1,7 @@
 openapi: 3.1.0
 
 info:
-  version: '2.10.2'
+  version: '2.10.3'
   title: Module BDUni
   description: >
 
@@ -31,6 +31,7 @@ paths:
       summary: Récupération des tronçons de route les plus proches
       description: |
         Renvoie une liste de résultats contenant les données d'un troncon de route bduni à partir d'une coordonnée en longitude/latitude.
+        
         Il faut obligatoirement renseiger les champs "lon" et "lat" ou le champ "geom" (mais pas les deux en même temps).
       tags: 
         - BDUni
