@@ -41,9 +41,9 @@ describe('Testing /api/cadastre/localisant', function() {
 
     });
 
-    it('/api/cadastre/localisant?code_insee=94067', function(done){
+    it('/api/cadastre/localisant?code_insee=33103', function(done){
         request(app)
-            .get('/api/cadastre/localisant?code_insee=94067')
+            .get('/api/cadastre/localisant?code_insee=33103')
             .expect(200,done);
     });
 
