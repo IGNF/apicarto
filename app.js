@@ -28,6 +28,8 @@ const __dirname = path.dirname(__filename);
 
 var app = express();
 
+app.disable('x-powered-by');
+
 /* Mentions légales */
 app.get('/api/doc/mentions', function(req,res){
     res.render('mentions');
