@@ -34,7 +34,7 @@ describe('Testing /api/bduni/troncon', function() {
             .expect(res => {
                 const feature = res.body.features[1];
                 expect(feature.geometry.type).to.eql('Point');
-                expect(feature.properties.numero).to.eql('D904');
+                expect(feature.numero).to.eql('D904');
             })
             .end(done);
         });
@@ -48,7 +48,7 @@ describe('Testing /api/bduni/troncon', function() {
             .expect(res => {
                 const feature = res.body.features[1];
                 expect(feature.geometry.type).to.eql('Point');
-                expect(feature.properties.numero).to.eql('D904');
+                expect(feature.numero).to.eql('D904');
             })
             .end(done);
         });
@@ -62,7 +62,7 @@ describe('Testing /api/bduni/troncon', function() {
             .expect(res => {
                 const feature = res.body.features[1];
                 expect(feature.geometry.type).to.eql('Point');
-                expect(feature.properties.numero).to.eql('D904');
+                expect(feature.numero).to.eql('D904');
             })
             .end(done);
         });

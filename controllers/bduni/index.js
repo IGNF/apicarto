@@ -60,20 +60,18 @@ var format = function(featureCollection, geom) {
         neo_feat.type = features[i].type;
         neo_feat.id = features[i].id;
         neo_feat.geometry_name = features[i].geometry_name;
-        neo_feat.properties = {
-            cleabs : features[i].properties.cleabs,
-            cl_admin : features[i].properties.cpx_classement_administratif,
-            nature : features[i].properties.nature,
-            pos_sol : features[i].properties.position_par_rapport_au_sol,
-            importance : features[i].properties.importance,
-            nb_voies : features[i].properties.nombre_de_voies,
-            sens : features[i].properties.sens_de_circulation,
-            largeur : features[i].properties.largeur_de_chaussee,
-            gestion : features[i].properties.cpx_gestionnaire,
-            numero : features[i].properties.cpx_numero
-        };
-        if(neo_feat.properties.nb_voies) {
-            neo_feat.properties.nb_voies = neo_feat.properties.nb_voies.toString();
+        neo_feat.cleabs = features[i].properties.cleabs;
+        neo_feat.cl_admin = features[i].properties.cpx_classement_administratif;
+        neo_feat.nature = features[i].properties.nature;
+        neo_feat.pos_sol = features[i].properties.position_par_rapport_au_sol;
+        neo_feat.importance = features[i].properties.importance;
+        neo_feat.nb_voies = features[i].properties.nombre_de_voies;
+        neo_feat.sens = features[i].properties.sens_de_circulation;
+        neo_feat.largeur = features[i].properties.largeur_de_chaussee;
+        neo_feat.gestion = features[i].properties.cpx_gestionnaire;
+        neo_feat.numero = features[i].properties.cpx_numero;
+        if(neo_feat.nb_voies) {
+            neo_feat.nb_voies = neo_feat.nb_voies.toString();
         }
 
         let nearestPoint = getNearestPoint(features[i].geometry.coordinates, JSON.parse(geom).coordinates);
@@ -81,7 +79,7 @@ var format = function(featureCollection, geom) {
         if(neo_feat.geometry.coordinates.length > 2) {
             neo_feat.geometry.coordinates.pop();
         }
-        neo_feat.properties.distance = nearestPoint.properties.dist;
+        neo_feat.distance = nearestPoint.properties.pointDistance;
 
         formated_features.push(neo_feat);       
     }
@@ -97,8 +95,8 @@ var getDepartmentName = function(req, res, featureCollection) {
     let setDepName = function(featureCollection, depList) {
         for(let i in featureCollection.features) {
             for(let j in depList) {
-                if(featureCollection.features[i].properties.gestion == depList[j].nom) {
-                    featureCollection.features[i].properties.gestion = depList[j].insee_dep;
+                if(featureCollection.features[i].gestion == depList[j].nom) {
+                    featureCollection.features[i].gestion = depList[j].insee_dep;
                     break;
                 }
             }
