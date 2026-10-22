@@ -22,7 +22,7 @@
   "repository": "IGNF/apicarto",
   "license": "CECILL-B",
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "//": "La dépendance 'nomnom' provoque une vulnérabilité critique si la version est supérieure à 1.5.0",
   "dependencies": {

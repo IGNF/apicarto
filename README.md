@@ -6,7 +6,7 @@
 
 Pour faire fonctionner API Carto, vous avez besoin de:
 
-* [Node.js](https://nodejs.org) v20+
+* [Node.js](https://nodejs.org) v24+
 
 ## Variables d'environnements
 
