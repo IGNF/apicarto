@@ -1,7 +1,7 @@
 openapi: 3.1.0
 
 info:
-  version: '2.10.4'
+  version: '2.10.5'
   title: Module pour rechercher dans tous les flux WFS Géoportail
   description: >
 
